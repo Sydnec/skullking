@@ -1,1 +1,1 @@
-# django_skullking
+# skullking
