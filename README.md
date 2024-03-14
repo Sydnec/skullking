@@ -2,5 +2,5 @@
 
 # How to launch : 
 ```bash
-  python manage.py runserver
+python manage.py runserver
 ```
