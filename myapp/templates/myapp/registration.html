@@ -1,0 +1,35 @@
+{% extends "myapp/base.html" %} {% block content %}
+<div class="register-content">
+	<!-- Form - User -->
+	<form action="" method="post" class="form-horizontal">
+		{% csrf_token %}
+		<div class="form-group">
+			<!-- Errors - username -->
+			{% if form.username.errors %}
+			<label class="alert alert-danger">{{ form.username.errors }}</label>
+			{% endif %}
+
+			<!-- Form field - username -->
+			<input type="text" placeholder="Username" class="form-control"
+			name="username" required value='{{ form.username.value|default:""}}'>
+		</div>
+
+		<div class="form-group">
+			<!-- Errors - password -->
+			{% if form.password.errors %}
+			<label class="alert alert-danger">{{ form.password.errors }}</label>
+			{% endif %}
+
+			<!-- Form field - password -->
+			<input type="password" placeholder="Password" class="form-control"
+			name="password" required value='{{ form.password.value|default:""}}''>
+		</div>
+		<div class="form-group">
+			<!-- Submit button -->
+			<button type="submit" class="btn btn-primary btn-block">
+				Submit
+			</button>
+		</div>
+	</form>
+</div>
+{% endblock content %}

@@ -1,0 +1,51 @@
+{% extends "myapp/base.html" %} {% block content %}
+<div class="login-content">
+	<!-- Errors messages -->
+	{% if form.errors %}
+	<div class="alert alert-danger">
+		Your username and password didn't match. Please try again.
+	</div>
+	{% else %} {% if next %} {% if user.is_authenticated %}
+	<div class="alert alert-info">
+		Your account doesn't have access to this page. To proceed, please login
+		with an account that has access.
+	</div>
+	{% else %}
+	<div class="alert alert-info">Please login to see this page.</div>
+	{% endif %} {% endif %} {% endif %}
+
+	<!-- Form - Login -->
+	<form method="post" action="{% url 'login' %}" class="form-horizontal">
+		{% csrf_token %}
+		<div class="form-group">
+			<!-- Form field - username -->
+			<input
+				type="text"
+				placeholder="Username"
+				class="form-control"
+				name="username"
+			/>
+		</div>
+		<div class="form-group">
+			<!-- Form field - password -->
+			<input
+				type="password"
+				placeholder="Password"
+				class="form-control"
+				name="password"
+			/>
+		</div>
+		<div class="row">
+			<input
+				type="submit"
+				class="btn btn-primary btn-block"
+				value="Login"
+			/>
+		</div>
+
+		<!-- Form field - next -->
+		<!-- Used to configure redirect after successful login -->
+		<input type="hidden" name="next" value="{% url 'myapp:home' %}" />
+	</form>
+</div>
+{% endblock %}

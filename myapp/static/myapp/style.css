@@ -1,0 +1,87 @@
+* {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font: inherit;
+	vertical-align: baseline;
+	overflow: hidden;
+	font-family: 'Pirata One', system-ui;
+	font-weight: 400;
+	font-style: normal;
+	font-size: 18px;
+}
+body,
+html,
+#content {
+	height: 100%;
+}
+a {
+	color: white;
+	text-decoration: none; /* Supprime le soulignement des liens */
+}
+/* ! FIN D'INITIALISATION ! */
+/* * blur effect : https://www.w3schools.com/howto/howto_css_blurred_background.asp */
+
+/* TODO Navbar */
+/* TODO Home button */
+.navbar {
+	height: 50px;
+	background-color: #333;
+}
+.navbar-left {
+	float: left; /* Alignement à gauche */
+	height: 100%;
+}
+#brand {
+	margin: 4px 0px 4px 25px;
+}
+#navbar-home {
+	display: inline-flex;
+}
+#navbar-home p {
+	display: block; /* Affiche les liens en tant que blocs */
+	/* font-weight: bold; */
+	color: white; /* Couleur du texte */
+	font-size: 26px;
+	text-align: center; /* Centre le texte horizontalement */
+	padding: 10px 10px 9px 10px; /* Espacement autour du texte */
+}
+/* TODO Log button */
+.navbar-right {
+	float: right; /* Alignement à droite */
+	display: -ms-grid;
+	height: 50px;
+}
+.navbar-nav {
+	display: inline-block;
+}
+.navbar-nav a {
+	float: right;
+	width: 70px;
+	color: #f2f2f2;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+}
+.navbar-nav a:hover {
+	background-color: #ddd;
+	color: black;
+}
+
+/* TODO Home */
+.home-content {
+	/* The image used */
+	background-image: url('./images/bg.jpg');
+	/* Full height */
+	height: 100%;
+	/* Center and scale the image nicely */
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+/* TODO Login */
+.alert {
+	color: red;
+	font-size: 130%;
+}

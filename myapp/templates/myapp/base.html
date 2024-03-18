@@ -1,0 +1,67 @@
+<!-- this is base template with navbar and footer -->
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Skullking</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Pirata+One&display=swap"
+			rel="stylesheet"
+		/>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="{% static 'myapp/style.css' %}"
+		/>
+	</head>
+	<body>
+		<!-- navbar -->
+		<nav class="navbar">
+			<div class="navbar-left">
+				<a id="navbar-home" href="{% url 'myapp:home' %}">
+					<img
+						id="brand"
+						src="{% static 'myapp/images/logo.png' %}"
+						alt="skullking logo"
+						width="42"
+						height="42"
+					/>
+					<p>Skullking</p>
+				</a>
+			</div>
+			<div class="navbar-right">
+				<!-- show registration only if user is not yet authenticated -->
+				{% if not user.is_authenticated %}
+				<ul class="navbar-nav">
+					<li class="active">
+						<a href="{% url 'register' %}">Registration</a>
+					</li>
+				</ul>
+				{% endif %}
+				<!-- show login only if user is not yet authenticated -->
+				{% if not user.is_authenticated %}
+				<ul class="navbar-nav">
+					<li class="active">
+						<a href="{% url 'login' %}">Login</a>
+					</li>
+				</ul>
+				{% endif %}
+				<!-- show sign out only if user is authenticated -->
+				{% if user.is_authenticated %}
+				<ul class="navbar-nav">
+					<li class="active">
+						<a href="{% url 'logout' %}">Sign Out</a>
+					</li>
+				</ul>
+				{% endif %}
+			</div>
+		</nav>
+
+		<div id="content">{% block content %}{% endblock %}</div>
+	</body>
+</html>
