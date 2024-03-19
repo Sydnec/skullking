@@ -1,19 +1,18 @@
+/* ! INITIALISATION ! */
 * {
 	margin: 0;
 	padding: 0;
 	border: 0;
 	font: inherit;
 	vertical-align: baseline;
-	overflow: hidden;
-	font-family: 'Pirata One', system-ui;
-	font-weight: 400;
-	font-style: normal;
+	font-family: 'Roboto Slab', serif;
+	font-optical-sizing: auto;
 	font-size: 18px;
+	overflow: hidden;
 }
-body,
-html,
 #content {
-	height: 100%;
+	height: calc(100vh - 50px);
+	background: linear-gradient(#141e30, #243b55);
 }
 a {
 	color: white;
@@ -22,34 +21,34 @@ a {
 /* ! FIN D'INITIALISATION ! */
 /* * blur effect : https://www.w3schools.com/howto/howto_css_blurred_background.asp */
 
-/* TODO Navbar */
+/* ! NAVBAR ! */
 /* TODO Home button */
 .navbar {
+	width: 100%;
 	height: 50px;
 	background-color: #333;
 }
-.navbar-left {
-	float: left; /* Alignement à gauche */
+.navbar-left, #navbar-home {
+	display: flex;
+	align-items: center;
+	float: left;
 	height: 100%;
 }
 #brand {
-	margin: 4px 0px 4px 25px;
-}
-#navbar-home {
-	display: inline-flex;
+	margin-left: 30px;
 }
 #navbar-home p {
-	display: block; /* Affiche les liens en tant que blocs */
-	/* font-weight: bold; */
-	color: white; /* Couleur du texte */
+	display: block;
+	color: white;
 	font-size: 26px;
-	text-align: center; /* Centre le texte horizontalement */
-	padding: 10px 10px 9px 10px; /* Espacement autour du texte */
+	text-align: center;
+	padding: 0px 10px;
 }
 /* TODO Log button */
 .navbar-right {
 	float: right; /* Alignement à droite */
-	display: -ms-grid;
+	display: flex;
+	align-items: center;
 	height: 50px;
 }
 .navbar-nav {
@@ -57,31 +56,130 @@ a {
 }
 .navbar-nav a {
 	float: right;
-	width: 70px;
+	width: 100px;
 	color: #f2f2f2;
 	text-align: center;
 	padding: 14px 16px;
 	text-decoration: none;
 }
-.navbar-nav a:hover {
-	background-color: #ddd;
+#register-button:hover {
+	background-color: rgb(123, 150, 239);
 	color: black;
+}
+#login-button:hover {
+	background-color: rgb(142, 239, 123);
+	color: black;
+}
+#signout-button:hover {
+	background-color: rgb(239, 123, 123);
+	color: black;
+}
+.account-infos {
+	display: inline-block; /* Affiche les liens en tant que blocs */
+	color: white; /* Couleur du texte */
+	font-size: 18px;
+	text-align: center; /* Centre le texte horizontalement */
+	vertical-align: top;
+	padding: 11px;
+}
+/* ! FIN NAVBAR ! */
+
+/* TODO Form */
+.alert {
+	color: red;
+	font-size: 130%;
+	padding-bottom: 10%;
+}
+.form-content {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 400px;
+	padding: 40px;
+	transform: translate(-50%, -50%);
+	background: rgba(0, 0, 0, 0.5);
+	box-sizing: border-box;
+	box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+	border-radius: 10px;
+}
+.form-content * {
+	overflow: visible;
+}
+.form-content h2 {
+	font-size: 50px;
+	margin: 0 0 30px;
+	padding: 0;
+	color: #fff;
+	text-align: center;
+}
+.form-content .user-box {
+	position: relative;
+}
+.form-content .user-box input {
+	width: 100%;
+	padding: 10px 0;
+	color: #fff;
+	margin-bottom: 30px;
+	border: none;
+	border-bottom: 1px solid #fff;
+	outline: none;
+	background: transparent;
+}
+.form-content .user-box label {
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding: 10px 0;
+	font-size: 16px;
+	color: #fff;
+	pointer-events: none;
+	transition: 0.5s;
+}
+.form-content .user-box input:focus ~ label,
+.form-content .user-box input:valid ~ label {
+	top: -20px;
+	left: 0;
+	color: #03e9f4;
+	font-size: 14px;
+}
+#submit-button {
+	background-color: transparent;
+	width: 40%;
+	position: relative;
+	display: inline-block;
+	padding: 10px 20px;
+	color: #03e9f4;
+	font-size: 16px;
+	text-decoration: none;
+	text-transform: uppercase;
+	overflow: hidden;
+	transition: 0.5s;
+	margin-top: 40px;
+	letter-spacing: 4px;
+	border-radius: 7px;
+	box-shadow: 0 0 10px #03e9f4;
+}
+#submit-button:hover {
+	background: #03e9f4;
+	color: #fff;
+	border-radius: 7px;
+	box-shadow: 0 0 5px #03e9f4, 0 0 25px #03e9f4;
 }
 
 /* TODO Home */
 .home-content {
-	/* The image used */
-	background-image: url('./images/bg.jpg');
-	/* Full height */
+	width: 100%;
 	height: 100%;
-	/* Center and scale the image nicely */
-	background-position: center;
-	background-repeat: no-repeat;
-	background-size: cover;
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	grid-gap: 10px;
 }
-
-/* TODO Login */
-.alert {
-	color: red;
-	font-size: 130%;
+.room-list,
+.room-creation {
+	display: block;
+	margin: 10%;
+	background: rgba(0, 0, 0, 0.5);
+	box-sizing: border-box;
+	box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+	border-radius: 10px;
 }

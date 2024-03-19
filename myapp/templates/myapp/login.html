@@ -1,5 +1,6 @@
 {% extends "myapp/base.html" %} {% block content %}
-<div class="login-content">
+<div class="form-content">
+	<h2>Login</h2>
 	<!-- Errors messages -->
 	{% if form.errors %}
 	<div class="alert alert-danger">
@@ -15,37 +16,23 @@
 	{% endif %} {% endif %} {% endif %}
 
 	<!-- Form - Login -->
-	<form method="post" action="{% url 'login' %}" class="form-horizontal">
+	<form method="post" action="{% url 'login' %}">
 		{% csrf_token %}
-		<div class="form-group">
+		<div class="user-box">
 			<!-- Form field - username -->
-			<input
-				type="text"
-				placeholder="Username"
-				class="form-control"
-				name="username"
-			/>
+			<input type="text" name="username" required="" />
+			<label>Username</label>
 		</div>
-		<div class="form-group">
+		<div class="user-box">
 			<!-- Form field - password -->
-			<input
-				type="password"
-				placeholder="Password"
-				class="form-control"
-				name="password"
-			/>
+			<input type="password" name="password" required="" />
+			<label>Password</label>
 		</div>
-		<div class="row">
-			<input
-				type="submit"
-				class="btn btn-primary btn-block"
-				value="Login"
-			/>
-		</div>
+		<input id="submit-button" type="submit" value="Login" />
 
 		<!-- Form field - next -->
 		<!-- Used to configure redirect after successful login -->
-		<input type="hidden" name="next" value="{% url 'myapp:home' %}" />
+		<input type="hidden" name="next" value="{% url 'home' %}" />
 	</form>
 </div>
 {% endblock %}

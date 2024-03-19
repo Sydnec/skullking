@@ -1,9 +1,11 @@
-{% extends "myapp/base.html" %}
+{% extends "myapp/base.html" %} {% block content %}
+<div class="home-content">
+    <div class="room-creation">
+        
+	</div>
+    <div class="room-list">
+		
+	</div>
+</div>
 
-{% block content %}
-    <div class="home-content">
-        {% if user.is_authenticated %}
-            <button>play</button>
-        {% endif %}
-    </div>
 {% endblock content %}
