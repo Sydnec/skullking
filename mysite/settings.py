@@ -121,3 +121,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 ACCOUNT_LOGOUT_REDIRECT_URL = "/myapp"
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

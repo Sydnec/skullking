@@ -32,7 +32,27 @@
 
 		<!-- Form field - next -->
 		<!-- Used to configure redirect after successful login -->
-		<input type="hidden" name="next" value="{% url 'home' %}" />
+		<script>
+			document.addEventListener('DOMContentLoaded', function () {
+				var nextValue = getUrlParameter('next');
+				var nextUrl = nextValue ;
+				var inputNext = document.querySelector('input[name="next"]');
+				nextUrl = nextUrl.endsWith('/')
+					? nextUrl.slice(0, -1)
+					: nextUrl;
+				inputNext.value = nextUrl || "{% url 'home' %}";
+			});
+
+			function getUrlParameter(name) {
+				name = name.replace(/[\[\]]/g, '\\$&');
+				var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+					results = regex.exec(window.location.href);
+				if (!results) return null;
+				if (!results[2]) return '';
+				return decodeURIComponent(results[2].replace(/\+/g, ' '));
+			}
+		</script>
+		<input type="hidden" name="next" value="/room" />
 	</form>
 </div>
 {% endblock %}

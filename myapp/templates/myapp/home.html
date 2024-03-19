@@ -1,10 +1,25 @@
 {% extends "myapp/base.html" %} {% block content %}
 <div class="home-content">
-    <div class="room-creation">
-        
-	</div>
-    <div class="room-list">
-		
+	<div class="room-creation">
+        <form action="/room/" method="post">
+			{% csrf_token %}
+			<button type="submit">Create room</button>
+		</form>
+    </div>
+	<div class="room-list">
+		{% for room in rooms_data %}
+		<h2>Room code: {{ room.code }}</h2>
+		<ul>
+			{% for username in room.usernames %}
+			<li>{{ username }}</li>
+			{% endfor %}
+		</ul>
+        <form action="/room/{{ room.code }}/" method="post">
+			{% csrf_token %}
+			<input type="hidden" name="room_id" value="{{ room.code }}" />
+			<button type="submit">Join room</button>
+		</form>
+		{% endfor %}
 	</div>
 </div>
 
