@@ -1,11 +1,18 @@
+<!-- myapp/templates/myapp/home.html -->
+
 {% extends "myapp/base.html" %} {% block content %}
 <div class="home-content">
 	<div class="room-creation">
-        <form action="/room/" method="post">
+		<form action="/room_redirect" method="get">
+			<label for="roomInput">Room code :</label>
+			<input type="text" id="roomInput" name="content" />
+			<input type="submit" value="Join room" />
+		</form>
+		<form action="/room/" method="post">
 			{% csrf_token %}
 			<button type="submit">Create room</button>
 		</form>
-    </div>
+	</div>
 	<div class="room-list">
 		{% for room in rooms_data %}
 		<h2>Room code: {{ room.code }}</h2>
@@ -14,7 +21,7 @@
 			<li>{{ username }}</li>
 			{% endfor %}
 		</ul>
-        <form action="/room/{{ room.code }}/" method="post">
+		<form action="/room/{{ room.code }}/" method="post">
 			{% csrf_token %}
 			<input type="hidden" name="room_id" value="{{ room.code }}" />
 			<button type="submit">Join room</button>

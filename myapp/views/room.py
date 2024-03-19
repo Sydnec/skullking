@@ -6,11 +6,21 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from myapp.models.models import Room, Player
 
+def room_redirect(request):
+    content = request.GET.get('content', '')
+    return redirect(f'/room/{content}')
+
 @login_required
 def newroom(request):
+    # Récupérer l'utilisateur actuel à partir de la requête
+    user = request.user
+    # Créer un nouveau joueur lié à l'utilisateur actuel
+    player = Player.objects.create(user=user)
     # Crée une nouvelle instance de Room
-    room = Room.objects.create()
-    # Redirige l'utilisateur vers une autre page ou un template
+    room = Room.objects.create(owner=player) 
+    # Ajouter ce joueur à la salle
+    room.players.add(player)
+    # Rediriger l'utilisateur vers une autre page ou un template
     return redirect('/room/'+room.code)
 
 
@@ -47,9 +57,11 @@ def leaveroom(request, room_id=None):
         room = Room.objects.get(code=room_id)
         # Supprimez l'utilisateur de la salle
         player = Player.objects.get(user=user, rooms=room)
-        room.players.remove(player)
-        player.delete()
-        if room.players.count() == 0:
+        if room.owner == player:
+            players_in_room = Player.objects.filter(rooms=room)
+            # Supprimer chaque joueur associé à la salle
+            for player in players_in_room:
+                player.delete()
             room.delete()
         return redirect('/')
     else:

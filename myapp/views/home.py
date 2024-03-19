@@ -1,3 +1,5 @@
+# myapp/views/home.py
+
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect

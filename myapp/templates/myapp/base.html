@@ -1,12 +1,13 @@
-<!-- this is base template with navbar and footer -->
-{% load static %}
+<!-- myapp/templates/myapp/base.html -->
 
+{% load static %}
 <!DOCTYPE html>
 <html lang="fr">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Skullking</title>
+		<link rel="shortcut icon" href="{% static 'myapp/images/logo.png' %}" />
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link
@@ -39,7 +40,9 @@
 				{% if not user.is_authenticated %}
 				<ul class="navbar-nav">
 					<li class="active">
-						<a id="register-button" href="{% url 'register' %}">Registration</a>
+						<a id="register-button" href="{% url 'register' %}"
+							>Registration</a
+						>
 					</li>
 				</ul>
 				{% endif %}
@@ -52,11 +55,13 @@
 				</ul>
 				{% endif %}
 				<!-- show sign out only if user is authenticated -->
-				{% if user.is_authenticated %} 
+				{% if user.is_authenticated %}
 				<p class="account-infos">Logged as {{ user.username }}</p>
 				<ul class="navbar-nav">
 					<li class="active">
-						<a id="signout-button" href="{% url 'logout' %}">Sign Out</a>
+						<a id="signout-button" href="{% url 'logout' %}"
+							>Sign Out</a
+						>
 					</li>
 				</ul>
 				{% endif %}

@@ -1,3 +1,5 @@
+# myapp/views/logout.py
+
 from django.shortcuts import redirect
 from django.contrib.auth import logout as auth_logout
 

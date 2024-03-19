@@ -11,6 +11,7 @@ class Room(models.Model):
     code = models.CharField(max_length=6, unique=True,  primary_key=True)
     players = models.ManyToManyField(Player, related_name='rooms', blank=True, limit_choices_to={'rooms__lt': 10})
     rounds = models.ManyToManyField('Round', related_name='rooms', blank=True, limit_choices_to={'rooms__lt': 10})
+    owner = models.ForeignKey(Player, on_delete=models.CASCADE, related_name='owned_rooms', null=False)
 
     def save(self, *args, **kwargs):
         if not self.code:

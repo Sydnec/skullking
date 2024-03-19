@@ -1,20 +1,6 @@
+<!-- myapp/templates/myapp/room.html -->
+
 {% extends "myapp/base.html" %} {% block content %}
-
-<script>
-	window.addEventListener('beforeunload', function () {
-		var confirmationMessage =
-			'Êtes-vous sûr de vouloir quitter cette page ?';
-
-		// Certains navigateurs nécessitent un retour pour afficher le message
-		e.returnValue = confirmationMessage;
-		// Effectuer une requête AJAX pour informer le serveur que l'utilisateur quitte la salle
-		var xhr = new XMLHttpRequest();
-		xhr.open('POST', '/leave/{{ room_id }}', true); // Remplacez '/leave-room/' par l'URL appropriée
-		xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
-		xhr.send();
-	});
-</script>
-
 <div class="room-content">
 	<ul>
 		{% for username in usernames %}
@@ -22,6 +8,10 @@
 		{% endfor %}
 	</ul>
 </div>
+<form action="" method="post">
+    {% csrf_token %}
+    <button type="submit" name="launch">Launch the game</button>
+</form>
 <form action="/leave/{{ room_id }}/" method="post">
 	{% csrf_token %}
 	<h2>Code : {{ room_id }}</h2>

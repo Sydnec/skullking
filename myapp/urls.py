@@ -1,7 +1,7 @@
 from myapp.views.home import home
 from myapp.views.game import game
 from myapp.views.logout import logout
-from myapp.views.room import newroom, joinroom, leaveroom
+from myapp.views.room import newroom, joinroom, leaveroom, room_redirect
 from myapp.views.register import RegisterView
 
 from django.urls import path, re_path
@@ -17,6 +17,7 @@ urlpatterns = [
     path('logout/', logout, name='logout'),
     path('register/', RegisterView.as_view(), name='register'),
     path('room/', newroom, name='room'),
+    path('room_redirect/', room_redirect, name='room_redirect'),
     path('room/<str:room_id>', game, name='room'),
     re_path(r'^room/(?P<room_id>[a-zA-Z0-9]{6})/$', game),  
     path('leave/<str:room_id>', leaveroom, name='room'),
