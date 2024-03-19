@@ -3,4 +3,4 @@ db.*
 __pycache__
 *.yaml
 UML.*
-migrations/0*
+0*.py
