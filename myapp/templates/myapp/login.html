@@ -1,7 +1,7 @@
 <!-- myapp/templates/myapp/login.html -->
 
 {% extends "myapp/base.html" %} {% block content %}
-<div class="form-content">
+<div class="form-content frame">
 	<h2>Login</h2>
 	<!-- Errors messages -->
 	{% if form.errors %}
@@ -30,20 +30,18 @@
 			<input type="password" name="password" required="" />
 			<label>Password</label>
 		</div>
-		<input id="submit-button" type="submit" value="Login" />
+		<button id="submit-button" type="submit">Login</button>
 
 		<!-- Form field - next -->
 		<!-- Used to configure redirect after successful login -->
 		<input type="hidden" name="next" id="nextInput" value="/" />
 		<script>
+			// Récupère la valeur de next dans l'URL et le met dans value de l'input qui gère la prochaine page
 			var currentUrl = window.location.href;
 			var nextParamIndex = currentUrl.indexOf("next=");
 			if (nextParamIndex !== -1) {
 				var nextParamValue = currentUrl.substring(nextParamIndex + 5);
 				document.getElementById("nextInput").value = decodeURIComponent(nextParamValue);
-			}
-			else{
-				document.getElementById("nextInput").value = "/";
 			}
 		</script>
 	</form>

@@ -1,8 +1,8 @@
 <!-- myapp/templates/myapp/registration.html -->
 
 {% extends "myapp/base.html" %} {% block content %}
-<div class="form-content">
-	<h2>Register</h2>
+<div class="form-content frame">
+	<h2>Registration</h2>
 	<!-- Form - User -->
 	<form action="" method="post" class="form-horizontal">
 		{% csrf_token %}
@@ -27,7 +27,8 @@
 			<label>Password</label>
 		</div>
 			<!-- Submit button -->
-			<input id="submit-button" type="submit" value="submit" />
+			<button id="submit-button" type="submit">Register</button>
+
 	</form>
 </div>
 {% endblock content %}

@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from myapp.models.models import Room, Player
 
 def room_redirect(request):
-    content = request.GET.get('content', '')
+    content = request.GET.get('content', '').upper()
     return redirect(f'/room/{content}')
 
 @login_required
@@ -32,9 +32,8 @@ def joinroom(request, room_id=None):
         try:
             # Récupérer la room correspondant à l'ID fourni
             room = Room.objects.get(code=room_id)
-            players = room.players.all()  # Récupérer tous les joueurs de la salle
         except Room.DoesNotExist:
-            return HttpResponse("Cette salle n'existe pas.")
+            return render(request, 'myapp/error.html', {'error': "Room doesn't exist"})
 
         # Vérifier si l'utilisateur est déjà dans la salle
         if not room.players.filter(user=user).exists():
@@ -42,10 +41,10 @@ def joinroom(request, room_id=None):
             player = Player.objects.create(user=user)
             # Ajouter ce joueur à la salle
             room.players.add(player)
-            # Rediriger l'utilisateur vers une autre page ou un template
+            # Rediriger l'utilisateur vers /room/ + room_id
             return redirect('/room/'+str(room_id))
     else:
-        return HttpResponse("L'ID de la salle n'a pas été fourni.")
+        return render(request, 'myapp/error.html', {'error': "Room code not found"})
 
 @login_required
 def leaveroom(request, room_id=None):
@@ -65,4 +64,4 @@ def leaveroom(request, room_id=None):
             room.delete()
         return redirect('/')
     else:
-        return JsonResponse({'error': 'Invalid request method'})
+        return render(request, 'myapp/error.html', {'error': 'Invalid request method'})

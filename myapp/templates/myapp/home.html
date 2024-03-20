@@ -1,32 +1,40 @@
 <!-- myapp/templates/myapp/home.html -->
 
 {% extends "myapp/base.html" %} {% block content %}
-<div class="home-content">
+<div class="home-content frame">
 	<div class="room-creation">
-		<form action="/room_redirect" method="get">
+		<form id="join-room-form" action="/room_redirect" method="get">
 			<label for="roomInput">Room code :</label>
-			<input type="text" id="roomInput" name="content" />
-			<input type="submit" value="Join room" />
+			<input type="text" id="code-input" name="content" />
+			<button type="submit">Join room</button>
 		</form>
-		<form action="/room/" method="post">
+		<form id="create-room-form" action="/room/" method="post">
 			{% csrf_token %}
 			<button type="submit">Create room</button>
 		</form>
 	</div>
 	<div class="room-list">
-		{% for room in rooms_data %}
-		<h2>Room code: {{ room.code }}</h2>
 		<ul>
-			{% for username in room.usernames %}
-			<li>{{ username }}</li>
+			{% for room in rooms_data %}
+			<li class="room-line-content">
+				<h2>Code: {{ room.code }}</h2>
+				<ul>
+					{% for username in room.usernames %}
+					<li>{{ username }}</li>
+					{% endfor %}
+				</ul>
+				<form action="/room/{{ room.code }}/" method="post">
+					{% csrf_token %}
+					<input
+						type="hidden"
+						name="room_id"
+						value="{{ room.code }}"
+					/>
+					<button type="submit">Join room</button>
+				</form>
+			</li>
 			{% endfor %}
 		</ul>
-		<form action="/room/{{ room.code }}/" method="post">
-			{% csrf_token %}
-			<input type="hidden" name="room_id" value="{{ room.code }}" />
-			<button type="submit">Join room</button>
-		</form>
-		{% endfor %}
 	</div>
 </div>
 
