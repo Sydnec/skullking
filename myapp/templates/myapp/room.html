@@ -1,22 +1,24 @@
 <!-- myapp/templates/myapp/room.html -->
 
 {% extends "myapp/base.html" %} {% block content %}
-<div class="frame">
-	<div class="room-content">
-		<ul>
-			{% for username in usernames %}
-			<li>{{ username }}</li>
-			{% endfor %}
-		</ul>
+<div class="room-content frame">
+	<h1>{{ room_id }}</h2>
+	<ul>
+		{% for username in usernames %}
+		<li class="username-list">{{ username }}</li>
+		{% endfor %}
+	</ul>
+	<div class="room-buttons">
+		{% if is_owner %}
+		<form action="" method="post">
+			{% csrf_token %}
+			<button type="submit" name="launch">Launch</button>
+		</form>
+		{% endif %}
+		<form action="/leave/{{ room_id }}/" method="post">
+			{% csrf_token %}
+			<button class="red-button" type="submit">Leave</button>
+		</form>
 	</div>
-	<form action="" method="post">
-		{% csrf_token %}
-		<button type="submit" name="launch">Launch the game</button>
-	</form>
-	<form action="/leave/{{ room_id }}/" method="post">
-		{% csrf_token %}
-		<h2>Code : {{ room_id }}</h2>
-		<button type="submit">Leave the room</button>
-	</form>
 </div>
 {% endblock content %}

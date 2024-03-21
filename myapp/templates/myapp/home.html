@@ -10,17 +10,17 @@
 		</form>
 		<form id="create-room-form" action="/room/" method="post">
 			{% csrf_token %}
-			<button type="submit">Create room</button>
+			<button class="green-button" type="submit">Create room</button>
 		</form>
 	</div>
+	<br>
 	<div class="room-list">
 		<ul>
 			{% for room in rooms_data %}
 			<li class="room-line-content">
-				<h2>Code: {{ room.code }}</h2>
-				<ul>
+				<ul class="player-list-line">
 					{% for username in room.usernames %}
-					<li>{{ username }}</li>
+					<span class="username-line">{{ username }}</span>
 					{% endfor %}
 				</ul>
 				<form action="/room/{{ room.code }}/" method="post">
