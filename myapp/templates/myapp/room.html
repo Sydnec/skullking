@@ -12,7 +12,7 @@
 		{% if is_owner %}
 		<form action="" method="post">
 			{% csrf_token %}
-			<button type="submit" name="launch">Launch</button>
+			<button type="submit" name="launch">Start</button>
 		</form>
 		{% endif %}
 		<form action="/leave/{{ room_id }}/" method="post">
