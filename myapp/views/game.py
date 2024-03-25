@@ -18,7 +18,7 @@ def game(request, room_id=None):
         except Room.DoesNotExist:
             return error(request, "Room doesn't exist")
 
-        if room.has_rounds:
+        if room.rounds.count() > 0:
             player = Player.objects.get(user=user, rooms=room)     
             if player in room.players.all():
                 return render(request, 'myapp/game.html', {'room_id': room_id})
