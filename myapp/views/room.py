@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from myapp.models.models import Room, Player
+from myapp.views.error import error
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
@@ -36,7 +37,7 @@ def joinroom(request, room=None):
         else:
             return 0
     else:
-        return render(request, 'myapp/error.html', {'error': "Room not found"})
+        return error(request, "Room not found")
 
 @login_required
 def leaveroom(request, room_id=None):
@@ -56,7 +57,7 @@ def leaveroom(request, room_id=None):
             send_room_updates(room, "leave")
         return redirect('/')
     else:
-        return render(request, 'myapp/error.html', {'error': 'Room not found'})
+        return 
 
 def send_room_updates(room, message):
     channel_layer = get_channel_layer()
