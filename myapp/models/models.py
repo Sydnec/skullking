@@ -9,7 +9,7 @@ class Player(models.Model):
 
 class Room(models.Model):
     code = models.CharField(max_length=6, unique=True,  primary_key=True)
-    players = models.ManyToManyField(Player, related_name='rooms', blank=True, limit_choices_to={'rooms__lt': 10})
+    players = models.ManyToManyField(Player, related_name='rooms', blank=True, limit_choices_to={'rooms__lt': 8})
     rounds = models.ManyToManyField('Round', related_name='rooms', blank=True, limit_choices_to={'rooms__lt': 10})
     owner = models.ForeignKey(Player, on_delete=models.CASCADE, related_name='owned_rooms')
 
@@ -24,7 +24,6 @@ class Room(models.Model):
 
 class Round(models.Model):
     bets = models.ManyToManyField('Bet', related_name='rounds', blank=True, limit_choices_to={'rounds__lt': 10})
-    players = models.ManyToManyField(Player, related_name='rounds', blank=True, limit_choices_to={'rounds__lt': 10})
     value = models.IntegerField(default=1, choices=[(i, i) for i in range(1, 11)])
 
 class Bet(models.Model):

@@ -18,8 +18,8 @@ urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
     path('room/', newroom, name='room'),
     path('room_redirect/', room_redirect, name='room_redirect'),
-    path('room/<str:room_id>', game, name='room'),
+    path('room/<room_id>', game, name='room'),
     re_path(r'^room/(?P<room_id>[a-zA-Z0-9]{6})/$', game),  
-    path('leave/<str:room_id>', leaveroom, name='room'),
+    path('leave/<room_id>', leaveroom, name='room'),
     re_path(r'^leave/(?P<room_id>[a-zA-Z0-9]{6})/$', leaveroom),  
 ]

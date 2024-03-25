@@ -6,7 +6,6 @@ from django.shortcuts import render, redirect
 from myapp.models import Room
 from myapp.views.room import joinroom
 
-
 @login_required
 def game(request, room_id=None):
     room_id = room_id.upper()
