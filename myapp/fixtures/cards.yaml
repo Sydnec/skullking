@@ -1,0 +1,491 @@
+# myapp/fixtures/cards.yaml
+
+- model: myapp.card
+  pk: 1
+  fields:
+    name : 'yellow1'
+    value: 1
+    type: yellow
+
+- model: myapp.card
+  pk: 2
+  fields:
+    name : 'yellow2'
+    value: 2
+    type: yellow
+
+- model: myapp.card
+  pk: 3
+  fields:
+    name : 'yellow3'
+    value: 3
+    type: yellow
+
+- model: myapp.card
+  pk: 4
+  fields:
+    name : 'yellow4'
+    value: 4
+    type: yellow
+
+- model: myapp.card
+  pk: 5
+  fields:
+    name : 'yellow5'
+    value: 5
+    type: yellow
+
+- model: myapp.card
+  pk: 6
+  fields:
+    name : 'yellow6'
+    value: 6
+    type: yellow
+
+- model: myapp.card
+  pk: 7
+  fields:
+    name : 'yellow7'
+    value: 7
+    type: yellow
+
+- model: myapp.card
+  pk: 8
+  fields:
+    name : 'yellow8'
+    value: 8
+    type: yellow
+
+- model: myapp.card
+  pk: 9
+  fields:
+    name : 'yellow9'
+    value: 9
+    type: yellow
+
+- model: myapp.card
+  pk: 10
+  fields:
+    name : 'yellow10'
+    value: 10
+    type: yellow
+
+- model: myapp.card
+  pk: 11
+  fields:
+    name : 'yellow11'
+    value: 11
+    type: yellow
+
+- model: myapp.card
+  pk: 12
+  fields:
+    name : 'yellow12'
+    value: 12
+    type: yellow
+
+- model: myapp.card
+  pk: 13
+  fields:
+    name : 'yellow13'
+    value: 13
+    type: yellow
+
+- model: myapp.card
+  pk: 14
+  fields:
+    name : 'yellow14'
+    value: 14
+    type: yellow
+
+- model: myapp.card
+  pk: 15
+  fields:
+    name : 'purple1'
+    value: 1
+    type: purple
+
+- model: myapp.card
+  pk: 16
+  fields:
+    name : 'purple2'
+    value: 2
+    type: purple
+
+- model: myapp.card
+  pk: 17
+  fields:
+    name : 'purple3'
+    value: 3
+    type: purple
+
+- model: myapp.card
+  pk: 18
+  fields:
+    name : 'purple4'
+    value: 4
+    type: purple
+
+- model: myapp.card
+  pk: 19
+  fields:
+    name : 'purple5'
+    value: 5
+    type: purple
+
+- model: myapp.card
+  pk: 20
+  fields:
+    name : 'purple6'
+    value: 6
+    type: purple
+
+- model: myapp.card
+  pk: 21
+  fields:
+    name : 'purple7'
+    value: 7
+    type: purple
+
+- model: myapp.card
+  pk: 22
+  fields:
+    name : 'purple8'
+    value: 8
+    type: purple
+
+- model: myapp.card
+  pk: 23
+  fields:
+    name : 'purple9'
+    value: 9
+    type: purple
+
+- model: myapp.card
+  pk: 24
+  fields:
+    name : 'purple10'
+    value: 10
+    type: purple
+
+- model: myapp.card
+  pk: 25
+  fields:
+    name : 'purple11'
+    value: 11
+    type: purple
+
+- model: myapp.card
+  pk: 26
+  fields:
+    name : 'purple12'
+    value: 12
+    type: purple
+
+- model: myapp.card
+  pk: 27
+  fields:
+    name : 'purple13'
+    value: 13
+    type: purple
+
+- model: myapp.card
+  pk: 28
+  fields:
+    name : 'purple14'
+    value: 14
+    type: purple
+
+- model: myapp.card
+  pk: 29
+  fields:
+    name : 'green1'
+    value: 1
+    type: green
+
+- model: myapp.card
+  pk: 30
+  fields:
+    name : 'green2'
+    value: 2
+    type: green
+
+- model: myapp.card
+  pk: 31
+  fields:
+    name : 'green3'
+    value: 3
+    type: green
+
+- model: myapp.card
+  pk: 32
+  fields:
+    name : 'green4'
+    value: 4
+    type: green
+
+- model: myapp.card
+  pk: 33
+  fields:
+    name : 'green5'
+    value: 5
+    type: green
+
+- model: myapp.card
+  pk: 34
+  fields:
+    name : 'green6'
+    value: 6
+    type: green
+
+- model: myapp.card
+  pk: 35
+  fields:
+    name : 'green7'
+    value: 7
+    type: green
+
+- model: myapp.card
+  pk: 36
+  fields:
+    name : 'green8'
+    value: 8
+    type: green
+
+- model: myapp.card
+  pk: 37
+  fields:
+    name : 'green9'
+    value: 9
+    type: green
+
+- model: myapp.card
+  pk: 38
+  fields:
+    name : 'green10'
+    value: 10
+    type: green
+
+- model: myapp.card
+  pk: 39
+  fields:
+    name : 'green11'
+    value: 11
+    type: green
+
+- model: myapp.card
+  pk: 40
+  fields:
+    name : 'green12'
+    value: 12
+    type: green
+
+- model: myapp.card
+  pk: 41
+  fields:
+    name : 'green13'
+    value: 13
+    type: green
+
+- model: myapp.card
+  pk: 42
+  fields:
+    name : 'green14'
+    value: 14
+    type: green
+
+- model: myapp.card
+  pk: 43
+  fields:
+    name : 'black1'
+    value: 1
+    type: black
+
+- model: myapp.card
+  pk: 44
+  fields:
+    name : 'black2'
+    value: 2
+    type: black
+
+- model: myapp.card
+  pk: 45
+  fields:
+    name : 'black3'
+    value: 3
+    type: black
+
+- model: myapp.card
+  pk: 46
+  fields:
+    name : 'black4'
+    value: 4
+    type: black
+
+- model: myapp.card
+  pk: 47
+  fields:
+    name : 'black5'
+    value: 5
+    type: black
+
+- model: myapp.card
+  pk: 48
+  fields:
+    name : 'black6'
+    value: 6
+    type: black
+
+- model: myapp.card
+  pk: 49
+  fields:
+    name : 'black7'
+    value: 7
+    type: black
+
+- model: myapp.card
+  pk: 50
+  fields:
+    name : 'black8'
+    value: 8
+    type: black
+
+- model: myapp.card
+  pk: 51
+  fields:
+    name : 'black9'
+    value: 9
+    type: black
+
+- model: myapp.card
+  pk: 52
+  fields:
+    name : 'black10'
+    value: 10
+    type: black
+
+- model: myapp.card
+  pk: 53
+  fields:
+    name : 'black11'
+    value: 11
+    type: black
+
+- model: myapp.card
+  pk: 54
+  fields:
+    name : 'black12'
+    value: 12
+    type: black
+
+- model: myapp.card
+  pk: 55
+  fields:
+    name : 'black13'
+    value: 13
+    type: black
+
+- model: myapp.card
+  pk: 56
+  fields:
+    name : 'black14'
+    value: 14
+    type: black
+
+- model: myapp.card
+  pk: 57
+  fields:
+    name : 'pirate1'
+    value: 1
+    type: pirate
+
+- model: myapp.card
+  pk: 58
+  fields:
+    name : 'pirate2'
+    value: 2
+    type: pirate
+
+- model: myapp.card
+  pk: 59
+  fields:
+    name : 'pirate3'
+    value: 3
+    type: pirate
+
+- model: myapp.card
+  pk: 60
+  fields:
+    name : 'pirate4'
+    value: 4
+    type: pirate
+
+- model: myapp.card
+  pk: 61
+  fields:
+    name : 'pirate5'
+    value: 5
+    type: pirate
+
+- model: myapp.card
+  pk: 62
+  fields:
+    name : 'escape1'
+    value: 1
+    type: escape
+
+- model: myapp.card
+  pk: 63
+  fields:
+    name : 'escape2'
+    value: 2
+    type: escape
+
+- model: myapp.card
+  pk: 64
+  fields:
+    name : 'escape3'
+    value: 3
+    type: escape
+
+- model: myapp.card
+  pk: 65
+  fields:
+    name : 'escape4'
+    value: 4
+    type: escape
+
+- model: myapp.card
+  pk: 66
+  fields:
+    name : 'escape5'
+    value: 5
+    type: escape
+
+- model: myapp.card
+  pk: 67
+  fields:
+    name : 'siren1'
+    value: 1
+    type: siren
+
+- model: myapp.card
+  pk: 68
+  fields:
+    name : 'siren2'
+    value: 2
+    type: siren
+
+- model: myapp.card
+  pk: 69
+  fields:
+    name : 'tigress'
+    value: 0
+    type: tigress
+
+- model: myapp.card
+  pk: 70
+  fields:
+    name : 'skullking'
+    value: 0
+    type: skullking

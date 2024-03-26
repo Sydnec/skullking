@@ -7,12 +7,15 @@
 	);
 	socket.onmessage = function (event) {
 		var data = JSON.parse(event.data);
+		console.log(data.data)
 		// dataExample = {message: "update_rooms", data: {code: "H668Q6", usernames: ["Sydnec", "Player1"], message: "join"}}
-		if (data.message === 'update_rooms') {
-			var roomData = data.data;
-			updateRoomList(roomData);
+		if (data.data === 'start') {
+			window.location.reload(true);
 		}
-
+		else {
+			updateRoomList(data.data);
+		}
+		
 		function updateRoomList(roomData) {
 			switch (roomData.message) {
 				case 'leave':
@@ -63,7 +66,7 @@
 	</ul>
 	<div class="room-buttons">
 		{% if is_owner %}
-		<form action="" method="post">
+		<form action="/start/{{ room_id }}/" method="post">
 			{% csrf_token %}
 			<button type="submit" name="launch">Start</button>
 		</form>

@@ -1,7 +1,6 @@
 <!-- myapp/templates/myapp/home.html -->
 
 {% extends "myapp/base.html" %} {% block content %}
-<!-- Script : reconnecte automatiquement au socket -->
 <script>
 	var socket = new ReconnectingWebSocket(
 		'ws://localhost:8001/ws/room_updates/'
@@ -17,9 +16,9 @@
 		function createRoomLi(roomData) {
 			// Créer l'élément li
 			var li = document.createElement('li');
-			li.classList.add('room-line-content', roomData.code);
+			li.classList.add('room-line-content', "code-" + roomData.code);
 			var div = document.createElement('div');
-			div.classList.add('player-list-line', roomData.code);
+			div.classList.add('player-list-line', "code-" + roomData.code);
 			// Ajouter les noms d'utilisateur à l'intérieur de la div
 			roomData.usernames.forEach(function (username) {
 				var span = document.createElement('span');
@@ -64,7 +63,7 @@
 				case 'leave':
 					document
 						.querySelectorAll(
-							`.player-list-line.${roomData.code} .username-line`
+							`.player-list-line.code-${roomData.code} .username-line`
 						)
 						.forEach(function (element) {
 							if (
@@ -79,7 +78,7 @@
 				case 'join':
 					document
 						.querySelectorAll(
-							`.player-list-line.${roomData.code} .username-line`
+							`.player-list-line.code-${roomData.code} .username-line`
 						)
 						.forEach(function (element) {
 							element.remove();
@@ -89,7 +88,7 @@
 						spanElement.className = 'username-line';
 						spanElement.textContent = username;
 						var playerList = document.querySelector(
-							`.player-list-line.${roomData.code}`
+							`.player-list-line.code-${roomData.code}`
 						);
 						playerList.appendChild(spanElement);
 					});
@@ -100,7 +99,7 @@
 					break;
 				case 'delete':
 					var roomLine = document.querySelector(
-						`.room-line-content.${roomData.code}`
+						`.room-line-content.code-${roomData.code}`
 					);
 					roomLine.remove();
 					break;
@@ -113,7 +112,7 @@
 </script>
 <div class="home-content frame">
 	<div class="room-creation">
-		<form id="join-room-form" action="/room_redirect" method="get">
+		<form id="join-room-form" action="{% url 'room_redirect' %}" method="get">
 			<label for="roomInput">Room code :</label>
 			<input type="text" id="code-input" name="content" />
 			<button type="submit">Join room</button>
@@ -127,19 +126,14 @@
 	<div class="room-list">
 		<ul>
 			{% for room in rooms_data %}
-			<li class="room-line-content {{ room.code }}">
-				<div class="player-list-line {{ room.code }}">
+			<li class="room-line-content code-{{ room.code }}">
+				<div class="player-list-line code-{{ room.code }}">
 					{% for username in room.usernames %}
 					<span class="username-line">{{ username }}</span>
 					{% endfor %}
 				</div>
 				<form action="/room/{{ room.code }}/" method="post">
 					{% csrf_token %}
-					<input
-						type="hidden"
-						name="room_id"
-						value="{{ room.code }}"
-					/>
 					<button type="submit">Join room</button>
 				</form>
 			</li>

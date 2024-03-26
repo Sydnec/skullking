@@ -138,6 +138,7 @@ button:hover {
 	height: 50px;
 }
 .navbar-nav {
+	height: 50px;
 	display: inline-block;
 }
 .navbar-nav a {
@@ -165,7 +166,7 @@ button:hover {
 	font-size: 18px;
 	text-align: center; /* Centre le texte horizontalement */
 	vertical-align: top;
-	padding: 11px;
+	padding: 13px;
 }
 .alert {
 	font-weight: 600;
@@ -326,4 +327,80 @@ button:hover {
 .room-buttons button {
 	padding: 10px 20px;
 	width: 100%;
+}
+/* TODO Game */
+.game-content {
+	text-align: center;
+	position: absolute;
+	top: calc(50% + 25px);
+	left: 50%;
+	padding: 30px;
+	transform: translate(-50%, -50%);
+	box-sizing: border-box;
+	box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+	border-radius: 10px;
+	height: calc(100% - 50px);
+	width: 100%;
+}
+.bet-buttons {
+	margin: 10px 5px;
+}
+.bet-buttons.active {
+	background: var(--main-color);
+	color: #fff;
+	border-radius: 7px;
+	box-shadow: 0 0 5px var(--main-color), 0 0 25px var(--main-color);
+}
+.game-player-list p {
+	display: inline-block;
+}
+/* TODO Affichage de la main */
+.your-hand {
+	height: 200px;
+	position: absolute;
+	bottom: 30px;
+	width: 100%;
+}
+.card {
+    display: inline-block;
+    border-radius: 8px;
+    position: relative;
+    transition: transform 0.3s ease; 
+}
+.card:hover {
+    cursor: pointer;
+    transform: translateY(-50px);
+}
+.card1 {
+	z-index: 1;
+}
+.card2 {
+	z-index: 2;
+}
+.card3 {
+	z-index: 3;
+}
+.card4 {
+	z-index: 4;
+}
+.card5 {
+	z-index: 5;
+}
+.card6 {
+	z-index: 6;
+}
+.card7 {
+	z-index: 7;
+}
+.card8 {
+	z-index: 8;
+}
+.card9 {
+	z-index: 9;
+}
+.card10 {
+	z-index: 10;
+}
+.overlap {
+	margin-left: min(calc(-150px + 10vw), -35px);
 }

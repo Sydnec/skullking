@@ -1,5 +1,5 @@
 from myapp.views.home import home
-from myapp.views.game import game
+from myapp.views.game import display, startgame, bet
 from myapp.views.logout import logout
 from myapp.views.room import newroom, joinroom, leaveroom, room_redirect
 from myapp.views.register import RegisterView
@@ -16,10 +16,13 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name='myapp/login.html'), name='login'),
     path('logout/', logout, name='logout'),
     path('register/', RegisterView.as_view(), name='register'),
-    path('room/', newroom, name='room'),
+    path('room/', newroom, name='newroom'),
     path('room_redirect/', room_redirect, name='room_redirect'),
-    path('room/<room_id>', game, name='room'),
-    re_path(r'^room/(?P<room_id>[a-zA-Z0-9]{6})/$', game),  
-    path('leave/<room_id>', leaveroom, name='room'),
+    path('bet/', bet, name='bet'),
+    path('room/<room_id>', display, name='room'),
+    re_path(r'^room/(?P<room_id>[a-zA-Z0-9]{6})/$', display),  
+    path('leave/<room_id>', leaveroom, name='leave'),
     re_path(r'^leave/(?P<room_id>[a-zA-Z0-9]{6})/$', leaveroom),  
+    path('start/<room_id>', startgame, name='start'),
+    re_path(r'^start/(?P<room_id>[a-zA-Z0-9]{6})/$', startgame),  
 ]

@@ -1,6 +1,6 @@
 .venv/
 db.*
 __pycache__
-*.yaml
-UML.*
+users.yaml
+*.txt
 0*.py

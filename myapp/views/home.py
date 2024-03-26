@@ -7,7 +7,7 @@ from myapp.models.models import Room, Player
 
 def home(request):
     if request.user.is_authenticated:
-        rooms = Room.objects.all()
+        rooms = Room.objects.exclude(rounds__isnull=False)
         room_data = []
         for room in rooms:
             players = room.players.all()
