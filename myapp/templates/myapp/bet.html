@@ -1,79 +1,100 @@
 <!-- myapp/templates/myapp/bet.html -->
 
-{% extends "myapp/game.html" %} {% block bet %}
-{% load static %}
-<!-- <p id="timer">10</p> -->
+{% extends "myapp/game.html" %} {% block bet %} {% load static %}
+<p id="timer">10</p>
+{% for player in players %}
+<div
+	class="player-hand"
+	style="transform: translateX(calc(35vw * cos(270deg - ((({{ forloop.counter0 }} + 1) * 360deg) / ({{ players|length }} + 1))))) translateY(calc(10vh + (-25vh * sin(270deg - ((({{ forloop.counter0 }} + 1) * 360deg) / ({{ players|length }} + 1)))))) rotate(180deg) translateY(-50px); z-index: {{ forloop.counter }};"
+>
+	<p style="transform: rotate(180deg) translateY(-8.9vh) translateX(-2.7vw)">
+		{{ player.user.username }}
+	</p>
+    {% for card in hand_cards %}
+	<img
+		class="card player-card"
+		src="{% static 'myapp/images/cards/back.png' %}"
+		style="height: max(12vh, 100px)px; transform: rotate(calc(({{ hand_cards|length }} - 1)* -5deg + ({{ forloop.counter }} - 1) * 10deg + 180deg)); z-index: {{ forloop.counter }};"
+	/>
+	{% endfor %}
+</div>
+{% endfor %}
 <div class="bet-selector">
-    {% for player in players %}
-    {% comment %}  {{ players|length }} / 2 - {{ forloop.counter }}) {% endcomment %}
-    {% comment %} rotate(calc(-120deg + (260deg / {{ players|length }} * {{ forloop.counter0 }}))) translateY(max(-55vh, -55vw)) {% endcomment %}
-        <div class="player-hand" style="transform: translateX(calc(35vw * cos(210deg - (({{ forloop.counter0 }} * 240deg) / ({{ players|length }} - 1))))) translateY(calc(10vh + (-30vh * sin(210deg - (({{ forloop.counter0 }} * 240deg) / ({{ players|length }} - 1)))))) rotate(180deg); z-index: {{ forloop.counter }};">
-            <p style="transform: rotate(180deg) translateY(-8.9vh) translateX(-2.2vw);">{{ player.user.username }}</p>
-            {% for card in hand_cards %}
-                <img class='card player-card' src="{% static 'myapp/images/cards/back.png' %}" style="height: max(12vh, 100px)px; transform: rotate(calc(({{ hand_cards|length }} - 1)* -5deg + ({{ forloop.counter }} - 1) * 10deg + 180deg)); z-index: {{ forloop.counter }};"></img>
-                    <!-- {% if i == own_bet.value %} 
-                        <button type="button" class="bet-buttons active" value="{{ forloop.counter }}">{{ forloop.counter }}</button>
-                    {% else %}
-                        <button type="button" class="bet-buttons" value="{{ forloop.counter }}">{{ forloop.counter }}</button>
-                    {% endif %} -->
-            {% endfor %}
-        </div>
+    {% for i in hand_cards %} 
+        {% if i == own_bet.value %}
+            <button
+                type="button"
+                class="bet-buttons active"
+                value="{{ forloop.counter0 }}"
+            >
+                {{ forloop.counter0 }}
+            </button>
+        {% else %}
+            <button type="button" class="bet-buttons" value="{{ forloop.counter0 }}">
+                {{ forloop.counter0 }}
+            </button>
+        {% endif %} 
     {% endfor %}
 </div>
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const buttons = document.querySelectorAll(".bet-buttons");
-        const room_id = document.querySelector('input[name="room_id"]').value;
+	document.addEventListener('DOMContentLoaded', function () {
+		const buttons = document.querySelectorAll('.bet-buttons');
+		const room_id = document.querySelector('input[name="room_id"]').value;
 
-        buttons.forEach(button => {
-            button.addEventListener("click", function() {
-                buttons.forEach(btn => {
-                    btn.classList.remove("active");
-                });
-                
-                this.classList.add("active");
-                const betValue = this.value;
+		buttons.forEach((button) => {
+			button.addEventListener('click', function () {
+				buttons.forEach((btn) => {
+					btn.classList.remove('active');
+				});
 
-                fetch('/bet/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': '{{ csrf_token }}', 
-                    },
-                    body: JSON.stringify({ 'bet_value': betValue, 'room_id':room_id }),
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.start_timer) {
-                        startTimer();
-                    }
-                });
-            });
-        });
-    });
+				this.classList.add('active');
+				const betValue = this.value;
 
-    function startTimer() {
-        var seconds = 2;
-        var timerElement = document.getElementById('timer');
+				fetch('/bet/', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+						'X-CSRFToken': '{{ csrf_token }}',
+					},
+					body: JSON.stringify({
+						bet_value: betValue,
+						room_id: room_id,
+					}),
+				})
+					.then((response) => response.json())
+					.then((data) => {
+						if (data.start_timer) {
+							startTimer();
+						}
+					});
+			});
+		});
+	});
 
-        var countdown = setInterval(function() {
-            seconds--;
-            timerElement.textContent = seconds;
+	function startTimer() {
+		var seconds = 2;
+		var timerElement = document.getElementById('timer');
 
-            if (seconds <= 0) {
-                clearInterval(countdown);
-                timerElement.textContent = 0;
-                fetch('/next/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': '{{ csrf_token }}', 
-                    },
-                    body: JSON.stringify({ 'room_id':document.querySelector('input[name="room_id"]').value }),
-                })
-                .then(response => response.json())
-            }
-        }, 1000);
-    }
+		var countdown = setInterval(function () {
+			seconds--;
+			timerElement.textContent = seconds;
+
+			if (seconds <= 0) {
+				clearInterval(countdown);
+				timerElement.textContent = 0;
+				fetch('/next/', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+						'X-CSRFToken': '{{ csrf_token }}',
+					},
+					body: JSON.stringify({
+						room_id: document.querySelector('input[name="room_id"]')
+							.value,
+					}),
+				}).then((response) => response.json());
+			}
+		}, 1000);
+	}
 </script>
 {% endblock bet %}

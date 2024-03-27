@@ -2,28 +2,18 @@
 
 {% extends "myapp/base.html" %} {% block content %}
 {% load static %}
-<div class="game-view">
-    <div class="game-content">
+<div class="game-content">
+    <div class="game-board">
         <input
             type="hidden"
             name="room_id"
             value="{{ room_id }}"
         />
-        {% if step == "bet" %}
+        {% comment %} {% if step == "bet" %} {% endcomment %}
             {% block bet %}{% endblock %}
-        {% elif step == "table" %}
+        {% comment %} {% elif step == "table" %}
             {% block table %}{% endblock %}
-        {% endif %}
-    </div>
-    <div class="game-infos">
-        <ul id="game-username-list">
-            {% for player, bet in player_bets.items %}
-                <li class="game-player-list">
-                    <p class="player-username">{{ player.user.username }} : </p>
-                    <p class="player-bet">{% if bet %}{{ bet.value }}{% else %}Pas de pari{% endif %}</p>
-                </li>
-            {% endfor %}
-        </ul>
+        {% endif %} {% endcomment %}
     </div>
     <div class='your-hand'>
         {% for hand_card in hand_cards %}

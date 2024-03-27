@@ -67,14 +67,18 @@ def game_logic(request, room):
     user = request.user
     players = room.players.all()
     current_round = room.rounds.all().latest('value')
+    current_player = Player.objects.get(user=user, rooms=room)
+
+    user_index = next((i for i, player in enumerate(players) if player == current_player), None)
+    if user_index is not None:
+        ordered_players = list(players[user_index + 1:]) + list(players[:user_index])
 
     player_bets = {}
     players_cards_number = {}
 
     for player in players:
         try:
-            player_hand = Hand.objects.get(player=player)
-            players_cards_number[player] = CardAssociation.objects.filter(hand=player_hand).count()
+            players_cards_number[player] = CardAssociation.objects.filter(hand=Hand.objects.get(player=player)).count()
         except Bet.DoesNotExist:
             players_cards_number[player] = 0
         try:
@@ -83,23 +87,18 @@ def game_logic(request, room):
         except Bet.DoesNotExist:
             player_bets[player] = None
 
-    current_player = Player.objects.get(user=user, rooms=room)
-    player_hand = Hand.objects.get(player=current_player)
-    hand_cards = CardAssociation.objects.filter(round=current_round, hand=player_hand)
-    actual_step = 'bet' if step == 1 else 'table'
+    hand_cards = CardAssociation.objects.filter(round=current_round, hand=Hand.objects.get(player=current_player))
     data = {
         # Bet only
         'own_bet': player_bets[current_player],
-        'bet_options': range(current_round.value+1),
         # Constant
         'room_id': room.code,
-        'players': players,
+        'players': ordered_players,
         'round_number': current_round.value,
-        'step':actual_step,
         'hand_cards': hand_cards,
         'players_cards_number':players_cards_number,
     }
-    return render(request, f'myapp/{actual_step}.html', data)
+    return render(request, 'myapp/bet.html', data)
 
 def distribute_cards(room):
     current_round = room.rounds.all().latest('value')

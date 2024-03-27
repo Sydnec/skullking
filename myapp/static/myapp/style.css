@@ -354,31 +354,22 @@ button:hover {
 	display: inline-block;
 }
 /* TODO Affichage du bandeau d'information */
-.game-view {
-	display: grid;
-	grid-template-columns: auto 1fr; /* Deux colonnes, la première est de largeur automatique, la seconde prend le reste de l'espace */
-	grid-template-rows: 1fr auto; /* Deux rangées, la première prend le reste de l'espace, la seconde est de hauteur automatique */
-	height: 100%; /* Hauteur de la grille à 100% de la hauteur de la fenêtre */
-}
 .game-content {
-	background-color: rgb(19, 53, 0);
-	grid-column: 2; /* Deuxième colonne */
-  	grid-row: 1; /* Première rangée */
+	display: flex;
+    flex-direction: column;
+	height: 100%;
 }
-.game-infos{
-	background-color: white;
-	grid-column: 1;
-	grid-row: span 2;
-	left: 0;
-	top: 0;
-	padding: 10px;
+.game-board {
+	flex: 1;
+	position: relative;
+	background-color: rgb(19, 53, 0);
 }
 .your-hand {
 	margin-bottom: 20px;
-	grid-column: 2;
-  	grid-row: 2;
+	bottom: 0;
 	background-color: red;
-	height: 200px;
+	height: 150px;
+	padding: auto;
 }
 /* TODO Affichage des cartes de la main */
 .card {
@@ -404,7 +395,7 @@ button:hover {
 	animation: tiltOne ease 1s;
 }
 .hand-card {
-	height: 200px;
+	height: 150px;
     display: inline-block;
     position: relative;
     transition: transform 0.3s ease; 
@@ -414,5 +405,5 @@ button:hover {
     transform: translateY(-50px);
 }
 .hand-overlap {
-	margin-left: min(calc(-170px + 10vw), -35px);
+	margin-left: min(calc(-120px + 10vw), -25px);
 }
