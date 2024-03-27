@@ -1,7 +1,7 @@
-from myapp.views.home import home
-from myapp.views.game import display, startgame, bet
-from myapp.views.logout import logout
-from myapp.views.room import newroom, joinroom, leaveroom, room_redirect
+from myapp.views.home import *
+from myapp.views.game import *
+from myapp.views.logout import *
+from myapp.views.room import *
 from myapp.views.register import RegisterView
 
 from django.urls import path, re_path
@@ -16,13 +16,19 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name='myapp/login.html'), name='login'),
     path('logout/', logout, name='logout'),
     path('register/', RegisterView.as_view(), name='register'),
+    
+
+    # Gestion des rooms
     path('room/', newroom, name='newroom'),
     path('room_redirect/', room_redirect, name='room_redirect'),
-    path('bet/', bet, name='bet'),
     path('room/<room_id>', display, name='room'),
     re_path(r'^room/(?P<room_id>[a-zA-Z0-9]{6})/$', display),  
     path('leave/<room_id>', leaveroom, name='leave'),
     re_path(r'^leave/(?P<room_id>[a-zA-Z0-9]{6})/$', leaveroom),  
     path('start/<room_id>', startgame, name='start'),
-    re_path(r'^start/(?P<room_id>[a-zA-Z0-9]{6})/$', startgame),  
+    re_path(r'^start/(?P<room_id>[a-zA-Z0-9]{6})/$', startgame), 
+
+    # Gestion des appels websocket
+    path('bet/', bet, name='bet'),
+    path('next/', next_step, name='next_step'),
 ]

@@ -48,12 +48,14 @@ input {
 }
 #content {
 	height: calc(100vh - 50px);
+	width: 100%;
+	text-align: center;
+	position: absolute;
 	background: linear-gradient(
 		var(--background-color),
 		var(--background-second-color)
 	);
 }
-
 /* TODO Elements réutiilisables */
 input {
 	border: none;
@@ -102,6 +104,16 @@ button:hover {
 	box-sizing: border-box;
 	box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
 	border-radius: 10px;
+}
+.fullscreen {
+	text-align: center;
+	position: absolute;
+	top: calc(50% + 25px);
+	left: 50%;
+	transform: translate(-50%, -50%);
+	box-sizing: border-box;
+	height: calc(100% - 50px);
+	width: 100%;
 }
 /* ! FIN D'INITIALISATION ! */
 /* * blur effect : https://www.w3schools.com/howto/howto_css_blurred_background.asp */
@@ -329,19 +341,6 @@ button:hover {
 	width: 100%;
 }
 /* TODO Game */
-.game-content {
-	text-align: center;
-	position: absolute;
-	top: calc(50% + 25px);
-	left: 50%;
-	padding: 30px;
-	transform: translate(-50%, -50%);
-	box-sizing: border-box;
-	box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
-	border-radius: 10px;
-	height: calc(100% - 50px);
-	width: 100%;
-}
 .bet-buttons {
 	margin: 10px 5px;
 }
@@ -354,53 +353,66 @@ button:hover {
 .game-player-list p {
 	display: inline-block;
 }
-/* TODO Affichage de la main */
-.your-hand {
-	height: 200px;
-	position: absolute;
-	bottom: 30px;
-	width: 100%;
+/* TODO Affichage du bandeau d'information */
+.game-view {
+	display: grid;
+	grid-template-columns: auto 1fr; /* Deux colonnes, la première est de largeur automatique, la seconde prend le reste de l'espace */
+	grid-template-rows: 1fr auto; /* Deux rangées, la première prend le reste de l'espace, la seconde est de hauteur automatique */
+	height: 100%; /* Hauteur de la grille à 100% de la hauteur de la fenêtre */
 }
+.game-content {
+	background-color: rgb(19, 53, 0);
+	grid-column: 2; /* Deuxième colonne */
+  	grid-row: 1; /* Première rangée */
+}
+.game-infos{
+	background-color: white;
+	grid-column: 1;
+	grid-row: span 2;
+	left: 0;
+	top: 0;
+	padding: 10px;
+}
+.your-hand {
+	margin-bottom: 20px;
+	grid-column: 2;
+  	grid-row: 2;
+	background-color: red;
+	height: 200px;
+}
+/* TODO Affichage des cartes de la main */
 .card {
+	border-radius: 8px;
+	border: 1px solid black;
+}
+.player-card {
+	height: max(12vh, 100px); 
+	position: absolute;
+    transform-origin: bottom center;
+	margin: 0;
+	padding: 0;
+	background-image: url('./images/cards/back.png');
+	animation: tiltOne ease 1s;
+}
+.player-hand {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+    transform-origin: bottom center;
+	margin: 0;
+	padding: 0;
+	animation: tiltOne ease 1s;
+}
+.hand-card {
+	height: 200px;
     display: inline-block;
-    border-radius: 8px;
     position: relative;
     transition: transform 0.3s ease; 
 }
-.card:hover {
+.hand-card:hover {
     cursor: pointer;
     transform: translateY(-50px);
 }
-.card1 {
-	z-index: 1;
-}
-.card2 {
-	z-index: 2;
-}
-.card3 {
-	z-index: 3;
-}
-.card4 {
-	z-index: 4;
-}
-.card5 {
-	z-index: 5;
-}
-.card6 {
-	z-index: 6;
-}
-.card7 {
-	z-index: 7;
-}
-.card8 {
-	z-index: 8;
-}
-.card9 {
-	z-index: 9;
-}
-.card10 {
-	z-index: 10;
-}
-.overlap {
-	margin-left: min(calc(-150px + 10vw), -35px);
+.hand-overlap {
+	margin-left: min(calc(-170px + 10vw), -35px);
 }

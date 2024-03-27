@@ -50,6 +50,7 @@ class Round(models.Model): # Value : 1..10, Appartient à 1 room, Stock les bets
     value = models.IntegerField(default=1, choices=[(i, i) for i in range(1, 11)])
     cards = models.ManyToManyField(Card, through='CardAssociation')
 
+# Création automatique du set de carte à chaque nouveau round
 @receiver(post_save, sender=Round)
 def create_card_associations(sender, instance, created, **kwargs):
     if created:

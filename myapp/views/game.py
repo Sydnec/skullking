@@ -3,6 +3,7 @@
 from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect
 from myapp.models import *
 from myapp.views.room import joinroom
@@ -11,6 +12,10 @@ from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 import random
 import json
+import time
+
+# Step : 1=Bet 2=table
+step = 1 
 
 @login_required
 def display(request, room_id):
@@ -46,12 +51,6 @@ def startgame(request, room_id):
     except Room.DoesNotExist:
         return error(request, "Room doesn't exist")
 
-    # Création du round
-    new_round = Round.objects.create(room=room)
-    room.rounds.add(new_round)
-    # Distribution des cartes
-    distribute_cards(room)
-
     # Envoi de l'update sur websocket
     channel_layer = get_channel_layer()
     async_to_sync(channel_layer.group_send)(
@@ -61,7 +60,7 @@ def startgame(request, room_id):
             'data': 'start'
         }
     )
-    return redirect('/room/'+room.code)
+    return next_round(request, room)
 
 @login_required
 def game_logic(request, room):
@@ -70,8 +69,14 @@ def game_logic(request, room):
     current_round = room.rounds.all().latest('value')
 
     player_bets = {}
+    players_cards_number = {}
 
     for player in players:
+        try:
+            player_hand = Hand.objects.get(player=player)
+            players_cards_number[player] = CardAssociation.objects.filter(hand=player_hand).count()
+        except Bet.DoesNotExist:
+            players_cards_number[player] = 0
         try:
             bet = Bet.objects.get(round=current_round, player=player)
             player_bets[player] = bet
@@ -81,17 +86,20 @@ def game_logic(request, room):
     current_player = Player.objects.get(user=user, rooms=room)
     player_hand = Hand.objects.get(player=current_player)
     hand_cards = CardAssociation.objects.filter(round=current_round, hand=player_hand)
+    actual_step = 'bet' if step == 1 else 'table'
     data = {
-        'step':'bet',
+        # Bet only
+        'own_bet': player_bets[current_player],
+        'bet_options': range(current_round.value+1),
+        # Constant
         'room_id': room.code,
         'players': players,
-        'player_bets': player_bets,
-        'own_bet': player_bets[current_player],
-        'round_value': current_round.value,
-        'bet_options': range(current_round.value+1),
-        'cards': hand_cards
+        'round_number': current_round.value,
+        'step':actual_step,
+        'hand_cards': hand_cards,
+        'players_cards_number':players_cards_number,
     }
-    return render(request, 'myapp/game.html', data)
+    return render(request, f'myapp/{actual_step}.html', data)
 
 def distribute_cards(room):
     current_round = room.rounds.all().latest('value')
@@ -132,6 +140,34 @@ def bet(request):
             bet = bet.first()
         bet.value = bet_value
         bet.save()
+
+        if Bet.objects.filter(round=current_round).count() == room.players.all().count():
+            return JsonResponse({'start_timer': True})
+
         return JsonResponse({'status': 'success'})
     else:
         return JsonResponse({'status': 'error', 'message': 'Method not allowed'}, status=405)
+
+def next_step(request):
+    global step
+    data = json.loads(request.body.decode('utf-8'))
+    room_id = data.get('room_id')
+
+    room = Room.objects.get(code=room_id)
+
+    step += 1
+    if step > 2:
+        step = 1
+        next_round(request, room)
+    print(step)
+    return JsonResponse({'status': 'success'})
+
+def next_round(request, room):
+    # Création du round
+    round_count = room.rounds.all().latest('value').value if room.rounds.exists() else 0
+    new_round = Round.objects.create(room=room, value=round_count+1)
+    room.rounds.add(new_round)
+    # Distribution des cartes
+    distribute_cards(room)
+
+    return redirect('/room/'+room.code)

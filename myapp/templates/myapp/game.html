@@ -2,71 +2,37 @@
 
 {% extends "myapp/base.html" %} {% block content %}
 {% load static %}
-<input
-    type="hidden"
-    name="room_id"
-    value="{{ room_id }}"
-/>
-{% if step == "bet" %}
-<div class="game-content">
-	<ul id="game-username-list">
-        {% for player, bet in player_bets.items %}
-            <li class="game-player-list">
-                <p class="player-username">{{ player.user.username }} : </p>
-                <p class="player-bet">{% if bet %}{{ bet.value }}{% else %}Pas de pari{% endif %}</p>
-            </li>
-		{% endfor %}
-	</ul>
-	<div class="bet-selector">
-        {% for i in bet_options %}
-            {% if i == own_bet.value %} 
-                <button type="button" class="bet-buttons active" value="{{ i }}">{{ i }}</button>
-            {% else %}
-                <button type="button" class="bet-buttons" value="{{ i }}">{{ i }}</button>
-            {% endif %}
-        {% endfor %}
+<div class="game-view">
+    <div class="game-content">
+        <input
+            type="hidden"
+            name="room_id"
+            value="{{ room_id }}"
+        />
+        {% if step == "bet" %}
+            {% block bet %}{% endblock %}
+        {% elif step == "table" %}
+            {% block table %}{% endblock %}
+        {% endif %}
+    </div>
+    <div class="game-infos">
+        <ul id="game-username-list">
+            {% for player, bet in player_bets.items %}
+                <li class="game-player-list">
+                    <p class="player-username">{{ player.user.username }} : </p>
+                    <p class="player-bet">{% if bet %}{{ bet.value }}{% else %}Pas de pari{% endif %}</p>
+                </li>
+            {% endfor %}
+        </ul>
     </div>
     <div class='your-hand'>
-        {% for card in cards %}
+        {% for hand_card in hand_cards %}
             {% if forloop.counter > 1 %}
-                <img class='card card{{ forloop.counter }} overlap {{ card.card.type }} val{{ card.card.value }}' src="{% static 'myapp/images/cards/' %}{{ card.card.name }}.png" height="200px"></img>
+                <img class='card hand-card hand-overlap' src="{% static 'myapp/images/cards/' %}{{ hand_card.card.name }}.png" style="z-index: {{ forloop.counter }};"></img>
             {% else %}
-                <img class='card card{{ forloop.counter }} {{ card.card.type }} val{{ card.card.value }}' src="{% static 'myapp/images/cards/' %}{{ card.card.name }}.png" height="200px"></img>
+                <img class='card hand-card' src="{% static 'myapp/images/cards/' %}{{ hand_card.card.name }}.png" style="z-index: {{ forloop.counter }};"></img>
             {% endif %}
         {% endfor %}
     </div>
-    <ul id="player-hand">
-        {% for card in cards %}
-            <li>{{ card.card.name }}</li>
-        {% endfor %}
-    </ul>
 </div>
-{% endif %}
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const buttons = document.querySelectorAll(".bet-buttons");
-        const room_id = document.querySelector('input[name="room_id"]').value;
-
-        buttons.forEach(button => {
-            button.addEventListener("click", function() {
-                buttons.forEach(btn => {
-                    btn.classList.remove("active");
-                });
-                
-                this.classList.add("active");
-                const betValue = this.value;
-
-                fetch('/bet/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': '{{ csrf_token }}', 
-                    },
-                    body: JSON.stringify({ 'bet_value': betValue, 'room_id':room_id }),
-                })
-                .then(response => response.json())
-            });
-        });
-    });
-</script>
 {% endblock content %}
