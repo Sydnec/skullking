@@ -29,6 +29,5 @@ urlpatterns = [
     re_path(r'^start/(?P<room_id>[a-zA-Z0-9]{6})/$', startgame), 
 
     # Gestion des appels websocket
-    path('bet/', bet, name='bet'),
-    path('next/', next_step, name='next_step'),
+    path('action/', game_action, name='action'),
 ]

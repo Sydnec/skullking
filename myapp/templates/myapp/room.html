@@ -9,7 +9,7 @@
 		var data = JSON.parse(event.data);
 		// dataExample = {message: "update_rooms", data: {code: "H668Q6", usernames: ["Sydnec", "Player1"], message: "join"}}
 		if (data.data === 'start') {
-			window.location.reload(true);
+			location.reload();
 		}
 		else {
 			updateRoomList(data.data);

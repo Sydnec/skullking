@@ -364,7 +364,7 @@ button:hover {
 	height: 150px;
 	padding: auto;
 }
-.bet-selector {
+.on-gameboard {
 	position: absolute;
 	right: 0;
 	left: 0;
@@ -379,10 +379,10 @@ button:hover {
 	border-radius: 7px;
 	box-shadow: 0 0 5px var(--main-color), 0 0 25px var(--main-color);
 }
-/* TODO Affichage des cartes de la main */
+/* TODO Affichage des cartes */
 .card {
 	border-radius: 8px;
-	border: 1px solid black;
+	border: 0.5px solid black;
 }
 .player-card {
 	height: max(12vh, 100px); 
@@ -390,7 +390,6 @@ button:hover {
     transform-origin: bottom center;
 	margin: 0;
 	padding: 0;
-	background-image: url('./images/cards/back.png');
 	animation: tiltOne ease 1s;
 }
 .player-hand {
@@ -414,4 +413,25 @@ button:hover {
 }
 .hand-overlap {
 	margin-left: min(calc(-120px + 10vw), -25px);
+}
+.trick-card-content {
+	display: inline-flex;
+	position: relative;
+	text-align: center;
+}
+.trick-card {
+	height: 130px;
+    display: block;
+    /* position: absolute; */
+    transition: transform 0.3s ease; 
+}
+.trick-overlap {
+	margin-left: min(calc(-90px + 10vw), 0px);
+}
+.card-owner {
+	position: absolute;
+	bottom: -40px;
+	left: 0;
+	right: 0;
+	display: block;
 }

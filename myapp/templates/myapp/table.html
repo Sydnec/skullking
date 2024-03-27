@@ -1,45 +1,16 @@
 <!-- myapp/templates/myapp/table.html -->
 
-{% extends "myapp/game.html" %} {% block table %}
-{% load static %}
-<div class="frame home-content">
-    <button type="button" class="table-buttons" value="{{ i }}">{{ i }}</button>
-    <p id="timer">10</p>
+{% extends "myapp/game.html" %} {% block board %} {% load static %}
+<div class="on-gameboard">
+    {% for card_association in trick_cards %}
+        {% if forloop.counter > 1 %}
+        <div class="trick-card-content trick-overlap">
+        {% else %}
+        <div class="trick-card-content">
+        {% endif %}
+            <img class='card trick-card' src="{% static 'myapp/images/cards/' %}{{ card_association.card.name }}.png" style="z-index: {{ forloop.counter }};" onclick="playCard('{{ card_association.card.name }}')"></img>
+            <p class="card-owner">{{ card_association.hand.player.user.username }}</p>
+        </div>
+    {% endfor %}
 </div>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const buttons = document.querySelectorAll(".table-buttons");
-        const room_id = document.querySelector('input[name="room_id"]').value;
-
-        buttons.forEach(button => {
-            button.addEventListener("click", function() {
-                startTimer();
-            });
-        });
-    });
-
-    function startTimer() {
-        var seconds = 10;
-        var timerElement = document.getElementById('timer');
-
-        var countdown = setInterval(function() {
-            seconds--;
-            timerElement.textContent = seconds;
-
-            if (seconds <= 0) {
-                clearInterval(countdown);
-                timerElement.textContent = 0;
-                fetch('/next/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': '{{ csrf_token }}', 
-                    },
-                    body: JSON.stringify({ 'room_id':document.querySelector('input[name="room_id"]').value }),
-                })
-                .then(response => response.json())
-            }
-        }, 1000);
-    }
-</script>
-{% endblock bet %}
+{% endblock board %}

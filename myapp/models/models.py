@@ -66,8 +66,8 @@ class Bet(models.Model): # Appartient à 1 joueur et 1 round. Value : 0..10
 class Hand(models.Model): # Appartient à 1 joueur. 
     player = models.OneToOneField(Player, on_delete=models.CASCADE)
 
-class Trick(models.Model): # Appatient à 1 joueur et 1 round
-    player = models.ForeignKey(Player, on_delete=models.CASCADE)
+class Trick(models.Model): # Appatient à 1 joueur (optionel) et 1 round
+    player = models.ForeignKey(Player, on_delete=models.CASCADE, null=True)
     round = models.ForeignKey(Round, on_delete=models.CASCADE)
 
 class Message(models.Model): # Appartient à 1 joueur et 1 room

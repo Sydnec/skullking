@@ -14,8 +14,7 @@ import random
 import json
 import time
 
-# Step : 1=Bet 2=table
-step = 1 
+phase = 1 # 1 = bet, 2 = play
 
 @login_required
 def display(request, room_id):
@@ -83,7 +82,7 @@ def game_logic(request, room):
 
     for player in ordered_players:
         try:
-            players_cards_number[player] = CardAssociation.objects.filter(hand=Hand.objects.get(player=player)).count()
+            players_cards_number[player] = CardAssociation.objects.filter(hand=Hand.objects.get(player=player), trick__isnull=True).count()
         except Bet.DoesNotExist:
             players_cards_number[player] = 0
         try:
@@ -92,16 +91,37 @@ def game_logic(request, room):
         except Bet.DoesNotExist:
             player_bets[player] = None
 
-    hand_cards = CardAssociation.objects.filter(round=current_round, hand=Hand.objects.get(player=current_player))
+    hand_cards = CardAssociation.objects.filter(round=current_round, hand=Hand.objects.get(player=current_player), trick__isnull=True)
+    try:
+        trick = Trick.objects.get(round=current_round)
+        phase = 2
+        trick_cards = CardAssociation.objects.filter(round=current_round, trick=trick)
+    except Trick.DoesNotExist:
+        phase = 1
+        trick_cards = None
+
     data = {
-        # Constant
         'room_id': room.code,
         'player_bets': player_bets,
         'round_number': current_round.value,
         'hand_cards': hand_cards,
+        'trick_cards': trick_cards,
         'players_cards_number':players_cards_number,
+        'start_timer': Bet.objects.filter(round=current_round).count() == room.players.all().count(),
     }
-    return render(request, 'myapp/bet.html', data)
+    if phase == 1:
+        return render(request, 'myapp/bet.html', data)
+    elif phase == 2:
+        return render(request, 'myapp/table.html', data)
+
+def next_round(request, room):
+    # Création du round
+    round_count = room.rounds.all().latest('value').value if room.rounds.exists() else 0
+    new_round = Round.objects.create(room=room, value=round_count+1)
+    room.rounds.add(new_round)
+    # Distribution des cartes
+    distribute_cards(room)
+    return game_logic(request, room)
 
 def distribute_cards(room):
     current_round = room.rounds.all().latest('value')
@@ -121,55 +141,58 @@ def distribute_cards(room):
             card_association.hand = hand
             card_association.save()
 
-def bet(request):
+def game_action(request):
     if request.method == 'POST':
-        # Récupérer le corps de la requête et le désérialiser en JSON
-        data = json.loads(request.body.decode('utf-8'))
-        
-        # Accéder aux valeurs des clés
-        bet_value = data.get('bet_value')
-        room_id = data.get('room_id')
-
         user = request.user
+        data = json.loads(request.body.decode('utf-8'))
+        room_id = data.get('room_id')
         room = Room.objects.get(code=room_id)
         current_round = room.rounds.all().latest('value')
         current_player = Player.objects.get(user=user, rooms=room)
+        action = data.get('action')
+        if action == "play":
+            return play_card(request, room, data)
+        elif action == "bet":
+            return bet(request, room, data)
+        elif action == "game_phase":
+            return game_phase(request, room)
+        elif action == "bet_phase":
+            return bet_phase(request, room)
 
-        bet = Bet.objects.filter(round=current_round, player=current_player)
-        if bet.count() == 0:
-            bet = Bet.objects.create(round=current_round, player=current_player)
-        else:
-            bet = bet.first()
-        bet.value = bet_value
-        bet.save()
+def game_phase(request, room):
+    current_round = room.rounds.all().latest('value')
+    Trick.objects.create(round=current_round)
+    return game_logic(request, room)
 
-        if Bet.objects.filter(round=current_round).count() == room.players.all().count():
-            return JsonResponse({'start_timer': True})
+def bet_phase(request, room):
+    next_round(request, room)
+    return game_logic(request, room)
 
-        return JsonResponse({'start_timer': False})
+def play_card(request, room, data):
+    user = request.user
+    current_player = Player.objects.get(user=user, rooms=room)
+    current_round = room.rounds.all().latest('value')
+    if Trick.objects.get(round=current_round):
+        # Vérifier que le joueur n'a pas encore joué
+        if Trick.objects.filter(round=current_round, player=current_player).count() == 0:
+            # Vérifier tour de jeu
+            card_name = data.get('card_name')
+            card_association = CardAssociation.objects.get(round=current_round, card=Card.objects.get(name=card_name))
+            card_association.trick = Trick.objects.get(round=current_round)
+            card_association.save()
+    return game_logic(request, room)
+
+def bet(request, room, data):
+    user = request.user
+    current_round = room.rounds.all().latest('value')
+    bet_value = data.get('bet_value')
+    current_player = Player.objects.get(user=user, rooms=room)
+
+    bet = Bet.objects.filter(round=current_round, player=current_player)
+    if bet.count() == 0:
+        bet = Bet.objects.create(round=current_round, player=current_player)
     else:
-        return JsonResponse({'status': 'error', 'message': 'Method not allowed'}, status=405)
-
-def next_step(request):
-    global step
-    data = json.loads(request.body.decode('utf-8'))
-    room_id = data.get('room_id')
-
-    room = Room.objects.get(code=room_id)
-
-    step += 1
-    if step > 2:
-        step = 1
-        next_round(request, room)
-    print(step)
-    return JsonResponse({'status': 'success'})
-
-def next_round(request, room):
-    # Création du round
-    round_count = room.rounds.all().latest('value').value if room.rounds.exists() else 0
-    new_round = Round.objects.create(room=room, value=round_count+1)
-    room.rounds.add(new_round)
-    # Distribution des cartes
-    distribute_cards(room)
-
-    return redirect('/room/'+room.code)
+        bet = bet.first()
+    bet.value = bet_value
+    bet.save()
+    return game_logic(request, room)
