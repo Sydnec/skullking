@@ -1,41 +1,46 @@
 <!-- myapp/templates/myapp/bet.html -->
 
 {% extends "myapp/game.html" %} {% block bet %} {% load static %}
-<p id="timer">10</p>
-{% for player in players %}
-<div
-	class="player-hand"
-	style="transform: translateX(calc(35vw * cos(270deg - ((({{ forloop.counter0 }} + 1) * 360deg) / ({{ players|length }} + 1))))) translateY(calc(10vh + (-25vh * sin(270deg - ((({{ forloop.counter0 }} + 1) * 360deg) / ({{ players|length }} + 1)))))) rotate(180deg) translateY(-50px); z-index: {{ forloop.counter }};"
->
-	<p style="transform: rotate(180deg) translateY(-8.9vh) translateX(-2.7vw)">
-		{{ player.user.username }}
-	</p>
-    {% for card in hand_cards %}
-	<img
-		class="card player-card"
-		src="{% static 'myapp/images/cards/back.png' %}"
-		style="height: max(12vh, 100px)px; transform: rotate(calc(({{ hand_cards|length }} - 1)* -5deg + ({{ forloop.counter }} - 1) * 10deg + 180deg)); z-index: {{ forloop.counter }};"
-	/>
-	{% endfor %}
-</div>
+<p id="timer"></p>
+{% for player, bet in player_bets.items %}
+{% if forloop.counter0 == 0 %}
+<div class="bet-content">
+    <div class="bet-selector">
+        {% for card in hand_cards %} 
+            {% if forloop.counter0 == bet.value %}
+                <button
+                    type="button"
+                    class="bet-buttons active"
+                    value="{{ forloop.counter0 }}"
+                >
+                    {{ forloop.counter0 }}
+                </button>
+            {% else %}
+                <button type="button" class="bet-buttons" value="{{ forloop.counter0 }}">
+                    {{ forloop.counter0 }}
+                </button>
+            {% endif %} 
+        {% endfor %}
+    </div>
+</div> 
+{% else %}
+    <div
+        class="player-hand"
+        style="transform: translateX(calc(35vw * cos(270deg - (({{ forloop.counter0 }} * 360deg) / {{ player_bets|length }})))) translateY(calc(10vh + (-30vh * sin(270deg - (({{ forloop.counter0 }} * 360deg) / {{ player_bets|length }}))))) rotate(180deg) translateY(-50px); z-index: {{ forloop.counter }};"
+    >
+        <p style="transform: rotate(180deg) translateY(-8.9vh) translateX(-2.7vw)">
+            {{ player.user.username }} : {% if bet %}{{ bet.value }}{% else %}No bet{% endif %}
+        </p>
+        {% for card in hand_cards %}
+        <img
+            class="card player-card"
+            src="{% static 'myapp/images/cards/back.png' %}"
+            style="height: max(12vh, 100px)px; transform: rotate(calc(({{ hand_cards|length }} - 1)* -5deg + ({{ forloop.counter }} - 1) * 10deg + 180deg)); z-index: {{ forloop.counter }};"
+        />
+        {% endfor %}
+    </div>
+{% endif %}
 {% endfor %}
-<div class="bet-selector">
-    {% for i in hand_cards %} 
-        {% if i == own_bet.value %}
-            <button
-                type="button"
-                class="bet-buttons active"
-                value="{{ forloop.counter0 }}"
-            >
-                {{ forloop.counter0 }}
-            </button>
-        {% else %}
-            <button type="button" class="bet-buttons" value="{{ forloop.counter0 }}">
-                {{ forloop.counter0 }}
-            </button>
-        {% endif %} 
-    {% endfor %}
-</div>
 <script>
 	document.addEventListener('DOMContentLoaded', function () {
 		const buttons = document.querySelectorAll('.bet-buttons');
@@ -50,7 +55,7 @@
 				this.classList.add('active');
 				const betValue = this.value;
 
-				fetch('/bet/', {
+                fetch('/bet/', {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
@@ -61,23 +66,32 @@
 						room_id: room_id,
 					}),
 				})
-					.then((response) => response.json())
-					.then((data) => {
-						if (data.start_timer) {
-							startTimer();
-						}
-					});
+				.then((response) => response.json())
+				.then((data) => {
+                    if (data.start_timer) {
+                        startTimer();
+                    }
+                });
 			});
 		});
 	});
 
 	function startTimer() {
-		var seconds = 2;
+		var seconds = 10;
 		var timerElement = document.getElementById('timer');
+        timerElement.textContent = seconds;
 
 		var countdown = setInterval(function () {
 			seconds--;
 			timerElement.textContent = seconds;
+             // Changer la couleur du texte en fonction du nombre de secondes restantes
+            if (seconds >= 1 && seconds <= 3) {
+                timerElement.style.color = "red";
+            } else if (seconds >= 4 && seconds <= 6) {
+                timerElement.style.color = "yellow";
+            } else if (seconds >= 7 && seconds <= 10) {
+                timerElement.style.color = "white";
+            }
 
 			if (seconds <= 0) {
 				clearInterval(countdown);
@@ -92,7 +106,11 @@
 						room_id: document.querySelector('input[name="room_id"]')
 							.value,
 					}),
-				}).then((response) => response.json());
+				}).then((response) => response.json())
+                .then(() => {
+                    // Actualiser la page
+                    location.reload();
+                });
 			}
 		}, 1000);
 	}

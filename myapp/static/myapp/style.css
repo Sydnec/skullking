@@ -341,6 +341,35 @@ button:hover {
 	width: 100%;
 }
 /* TODO Game */
+.game-content {
+	display: flex;
+    flex-direction: column;
+	height: 100%;
+}
+#timer {
+	font-size: 50px;
+	font-weight: 700;
+	position: absolute;
+	bottom: 10%;
+	right: 0;
+	left: 0;
+}
+.game-board {
+	flex: 1;
+	position: relative;
+}
+.your-hand {
+	margin-bottom: 20px;
+	bottom: 0;
+	height: 150px;
+	padding: auto;
+}
+.bet-selector {
+	position: absolute;
+	right: 0;
+	left: 0;
+	top: 50%;
+}
 .bet-buttons {
 	margin: 10px 5px;
 }
@@ -349,27 +378,6 @@ button:hover {
 	color: #fff;
 	border-radius: 7px;
 	box-shadow: 0 0 5px var(--main-color), 0 0 25px var(--main-color);
-}
-.game-player-list p {
-	display: inline-block;
-}
-/* TODO Affichage du bandeau d'information */
-.game-content {
-	display: flex;
-    flex-direction: column;
-	height: 100%;
-}
-.game-board {
-	flex: 1;
-	position: relative;
-	background-color: rgb(19, 53, 0);
-}
-.your-hand {
-	margin-bottom: 20px;
-	bottom: 0;
-	background-color: red;
-	height: 150px;
-	padding: auto;
 }
 /* TODO Affichage des cartes de la main */
 .card {

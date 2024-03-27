@@ -73,10 +73,15 @@ def game_logic(request, room):
     if user_index is not None:
         ordered_players = list(players[user_index + 1:]) + list(players[:user_index])
 
-    player_bets = {}
     players_cards_number = {}
+    player_bets = {}
 
-    for player in players:
+    try:
+        player_bets[current_player] = Bet.objects.get(round=current_round, player=current_player)
+    except Bet.DoesNotExist:
+        player_bets[current_player] = None
+
+    for player in ordered_players:
         try:
             players_cards_number[player] = CardAssociation.objects.filter(hand=Hand.objects.get(player=player)).count()
         except Bet.DoesNotExist:
@@ -89,11 +94,9 @@ def game_logic(request, room):
 
     hand_cards = CardAssociation.objects.filter(round=current_round, hand=Hand.objects.get(player=current_player))
     data = {
-        # Bet only
-        'own_bet': player_bets[current_player],
         # Constant
         'room_id': room.code,
-        'players': ordered_players,
+        'player_bets': player_bets,
         'round_number': current_round.value,
         'hand_cards': hand_cards,
         'players_cards_number':players_cards_number,
@@ -143,7 +146,7 @@ def bet(request):
         if Bet.objects.filter(round=current_round).count() == room.players.all().count():
             return JsonResponse({'start_timer': True})
 
-        return JsonResponse({'status': 'success'})
+        return JsonResponse({'start_timer': False})
     else:
         return JsonResponse({'status': 'error', 'message': 'Method not allowed'}, status=405)
 
