@@ -24,6 +24,6 @@ urlpatterns = [
     path('leave/<room_id>', leaveroom, name='leave'),
     re_path(r'^leave/(?P<room_id>[a-zA-Z0-9]{6})/$', leaveroom),
 
-    # Gestion des appels websocket
+    # Gestion des actions in-game
     path('action/', game_action, name='action'),
 ]
