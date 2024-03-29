@@ -314,7 +314,6 @@ button:hover {
 #back-to-home {
 	margin-top: 40px;
 }
-
 /* TODO Room */
 .room-content {
 	width: 70%;
@@ -339,20 +338,23 @@ button:hover {
 }
 /* TODO Game */
 .game-content {
-	display: flex;
-    flex-direction: column;
+	display: grid;
+	grid-template-columns: 1fr auto;
 	height: 100%;
 }
-#timer {
-	font-size: 50px;
-	font-weight: 700;
-	position: absolute;
-	bottom: 10%;
-	right: 0;
-	left: 0;
+.right-panel {
+	background-color: #222;
+	display: grid;
+	grid-template-rows: auto 1fr;
+	width: 200px;
 }
+.left-panel {
+	display: grid;
+	grid-template-rows: 1fr auto;
+	width: 100%;
+}
+/* ? Left panel */
 .game-board {
-	flex: 1;
 	position: relative;
 }
 .your-hand {
@@ -376,6 +378,61 @@ button:hover {
 	border-radius: 7px;
 	box-shadow: 0 0 5px var(--main-color), 0 0 25px var(--main-color);
 }
+#toggleHiddenRightPanel {
+	font-family: "Nanum Gothic Coding", monospace;
+	font-weight: 600;
+	font-style: normal;
+	background-color: white;
+	position: absolute;
+	width: 20px;
+	height: 40px;
+	top: 0;
+	right: 0;
+	display: flex;
+	color: black;
+	padding: 0;
+	font-size: 20px;
+	transition: 0;
+	border-radius: 0;
+	box-shadow: none;
+	justify-content: center;
+    align-items: center;
+}
+#toggleHiddenRightPanel:hover {
+	color: black;
+	border-radius: 0;
+	box-shadow: none;
+}
+/* ? Right panel */
+.right-panel * {
+	font-size: 15px;
+}
+.right-panel h2 {
+	font-size: 22px;
+	margin: 15px 0px;
+	font-weight: 700;
+}
+#scoreboard {
+	padding: 10px 0px;
+	margin-bottom: 20px;
+}
+#scoreboard p {
+	font-size: 18px;
+	margin: 5px;
+}
+#message-box{
+	height: 100%;
+	display: grid;
+	grid-template-rows: auto 1fr auto;
+}
+#message-box input{
+	width: 80%;
+	margin: auto;
+	margin-bottom: 1vh;
+}
+#message-box ul{
+	overflow: scroll;
+}
 /* TODO Affichage des cartes */
 .card {
 	border-radius: 8px;
@@ -383,8 +440,8 @@ button:hover {
 }
 .player-card {
 	height: max(11vh, 80px); 
-	position: absolute;
-    transform-origin: bottom center;
+	/* position: absolute; */
+    transform-origin: center;
 	margin: 0;
 	padding: 0;
 	animation: tiltOne ease 1s;
@@ -419,7 +476,6 @@ button:hover {
 .trick-card {
 	height: 130px;
     display: block;
-    /* position: absolute; */
     transition: transform 0.3s ease; 
 }
 .trick-overlap {

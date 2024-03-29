@@ -2,6 +2,9 @@
 
 {% extends "myapp/base.html" %} {% block content %}
 {% load static %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding&display=swap" rel="stylesheet">
 <script>
     const currentUrl = window.location.pathname;
     const parts = currentUrl.split('/');
@@ -18,42 +21,57 @@
     }
 </script>
 <div class="game-content">
-    <div class="game-board">
-        <input
-            type="hidden"
-            name="room_id"
-            value="{{ room_id }}"
-        />
-        {% for player, data in players_data.items %}
-            {% if forloop.counter0 == 0 %}
-                {# Première itération donc player = moi #}
-                {% block board %}{% endblock board %}
-            {% else %}
-                {# Les autres joueurs #}
-                <div class="player-hand" style="transform: translateX(calc(35vw * cos(270deg - (({{ forloop.counter0 }} * 360deg) / {{ players_data|length }})))) translateY(calc(10vh + (-30vh * sin(270deg - (({{ forloop.counter0 }} * 360deg) / {{ players_data|length }}))))) rotate(180deg) translateY(-50px); z-index: {{ forloop.counter }};">
-                    <p style="transform: rotate(180deg) translateY(-8.9vh) translateX(-2.7vw)">
-                        {{ player.user.username }}<br>
-                        Bet : {% if data.bet %}{{ data.bet.value }}{% else %}No bet{% endif %}<br>
-                        Tricks : {{ data.tricks_number }}<br>
-                        Score : {{ player.score }}
-                    </p>
-                    {% with ''|center:data.cards_number as range %}
-                        {% for _ in range %}
-                            <img class="card player-card" src="{% static 'myapp/images/cards/back.png' %}" style="transform: rotate(calc(({{ data.cards_number }} - 1)* -5deg + {{ forloop.counter0 }} * 10deg + 180deg)); z-index: {{ forloop.counter }};" />
-                        {% endfor %}
-                    {% endwith %}
-                </div>
-            {% endif %}
-        {% endfor %}
+    <div class="left-panel">
+        <div class="game-board">
+            <button id="toggleHiddenRightPanel" onclick="toggleHiddenRightPanel()" style="z-index: 10">></button>
+            <input
+                type="hidden"
+                name="room_id"
+                value="{{ room_id }}"
+            />
+            {% for player, data in players_data.items %}
+                {% if forloop.counter0 == 0 %}
+                    {# Première itération donc player = moi #}
+                    {% block board %}{% endblock board %}
+                {% else %}
+                    {# Les autres joueurs #}
+                    {% comment %}  rotate(180deg) translateY(-50px);  {% endcomment %}
+                    <div class="player-hand" style="transform: translateX(calc(-75px + 35vw * cos(270deg - (({{ forloop.counter0 }} * 360deg) / {{ players_data|length }})))) translateY(calc(-25px + (-32vh * sin(270deg - (({{ forloop.counter0 }} * 360deg) / {{ players_data|length }}))))); z-index: {{ forloop.counter }};">
+                        {% comment %} style="transform: rotate(180deg) translateY(-8.9vh) translateX(-2.7vw)" {% endcomment %}
+                        {% with ''|center:data.cards_number as range %}
+                            {% for _ in range %}
+                                <img class="card player-card" src="{% static 'myapp/images/cards/back.png' %}" style="transform: rotate(calc(({{ data.cards_number }} - 1)* -5deg + {{ forloop.counter0 }} * 10deg)); z-index: {{ forloop.counter }};" />
+                            {% endfor %}
+                        {% endwith %}
+                        <p>
+                            {{ player.user.username }} : {{ data.tricks_number }} / {% if data.bet %}{{ data.bet.value }}{% else %}No bet{% endif %}<br>
+                        </p>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class='your-hand'>
+            {% for hand_card in hand_cards %}
+                {% if forloop.counter > 1 %}
+                    <img class='card hand-card hand-overlap' src="{% static 'myapp/images/cards/' %}{{ hand_card.card.name }}.png" style="z-index: {{ forloop.counter }};" onclick="playCard('{{ hand_card.card.name }}')">
+                {% else %}
+                    <img class='card hand-card' src="{% static 'myapp/images/cards/' %}{{ hand_card.card.name }}.png" style="z-index: {{ forloop.counter }};" onclick="playCard('{{ hand_card.card.name }}')">
+                {% endif %}
+            {% endfor %}
+        </div>
     </div>
-    <div class='your-hand'>
-        {% for hand_card in hand_cards %}
-            {% if forloop.counter > 1 %}
-                <img class='card hand-card hand-overlap' src="{% static 'myapp/images/cards/' %}{{ hand_card.card.name }}.png" style="z-index: {{ forloop.counter }};" onclick="playCard('{{ hand_card.card.name }}')">
-            {% else %}
-                <img class='card hand-card' src="{% static 'myapp/images/cards/' %}{{ hand_card.card.name }}.png" style="z-index: {{ forloop.counter }};" onclick="playCard('{{ hand_card.card.name }}')">
-            {% endif %}
-        {% endfor %}
+    <div class="right-panel">
+        <div id="scoreboard">
+            <h2>Scoreboard</h2>
+            {% for player, data in players_data.items %}
+                <p>{{ player.user.username }} : {{ player.score }}</p>
+            {% endfor %}
+        </div>
+        <div id="message-box">
+            <h2>Messages</h2>
+            <ul></ul>
+            <input></input>
+        </div>
     </div>
 </div>
 <script>
@@ -73,6 +91,13 @@ function playCard(cardName) {
         }),
     })
     .then((response) => response.json())
+}
+function toggleHiddenRightPanel(){
+    const button = document.getElementById('toggleHiddenRightPanel')
+    const rightPanel = document.querySelector('.right-panel')
+
+    rightPanel.style.display = rightPanel.style.display === "none" ? "block" : "none";
+    button.textContent = rightPanel.style.display === "none" ? "<" : ">";
 }
 </script>
 {% endblock content %}
