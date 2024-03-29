@@ -2,6 +2,21 @@
 
 {% extends "myapp/base.html" %} {% block content %}
 {% load static %}
+<script>
+    const currentUrl = window.location.pathname;
+    const parts = currentUrl.split('/');
+    const room_id = parts[2]
+
+    var socket = new ReconnectingWebSocket(
+        'ws://localhost:8001/ws/game_updates/'
+    );
+    socket.onmessage = function (event) {
+        const data = JSON.parse(event.data);
+        if (data.room_id == room_id) {
+            location.reload();
+        }
+    }
+</script>
 <div class="game-content">
     <div class="game-board">
         <input
@@ -9,26 +24,24 @@
             name="room_id"
             value="{{ room_id }}"
         />
-        {% for player, bet in player_bets.items %}
-            {% if forloop.counter0 == 0 %} 
-            {% comment %} Première itération donc player = moi {% endcomment %}
+        {% for player, data in players_data.items %}
+            {% if forloop.counter0 == 0 %}
+                {# Première itération donc player = moi #}
                 {% block board %}{% endblock board %}
             {% else %}
-            {% comment %} Les autres joueurs {% endcomment %}
-                <div
-                    class="player-hand"
-                    style="transform: translateX(calc(35vw * cos(270deg - (({{ forloop.counter0 }} * 360deg) / {{ player_bets|length }})))) translateY(calc(10vh + (-30vh * sin(270deg - (({{ forloop.counter0 }} * 360deg) / {{ player_bets|length }}))))) rotate(180deg) translateY(-50px); z-index: {{ forloop.counter }};"
-                >
+                {# Les autres joueurs #}
+                <div class="player-hand" style="transform: translateX(calc(35vw * cos(270deg - (({{ forloop.counter0 }} * 360deg) / {{ players_data|length }})))) translateY(calc(10vh + (-30vh * sin(270deg - (({{ forloop.counter0 }} * 360deg) / {{ players_data|length }}))))) rotate(180deg) translateY(-50px); z-index: {{ forloop.counter }};">
                     <p style="transform: rotate(180deg) translateY(-8.9vh) translateX(-2.7vw)">
-                        {{ player.user.username }} : {% if bet %}{{ bet.value }}{% else %}No bet{% endif %}
+                        {{ player.user.username }}<br>
+                        Bet : {% if data.bet %}{{ data.bet.value }}{% else %}No bet{% endif %}<br>
+                        Tricks : {{ data.tricks_number }}<br>
+                        Score : {{ player.score }}
                     </p>
-                    {% for card in hand_cards %}
-                    <img
-                        class="card player-card"
-                        src="{% static 'myapp/images/cards/back.png' %}"
-                        style="height: max(12vh, 100px)px; transform: rotate(calc(({{ hand_cards|length }} - 1)* -5deg + ({{ forloop.counter }} - 1) * 10deg + 180deg)); z-index: {{ forloop.counter }};"
-                    />
-                    {% endfor %}
+                    {% with ''|center:data.cards_number as range %}
+                        {% for _ in range %}
+                            <img class="card player-card" src="{% static 'myapp/images/cards/back.png' %}" style="transform: rotate(calc(({{ data.cards_number }} - 1)* -5deg + {{ forloop.counter0 }} * 10deg + 180deg)); z-index: {{ forloop.counter }};" />
+                        {% endfor %}
+                    {% endwith %}
                 </div>
             {% endif %}
         {% endfor %}
@@ -36,9 +49,9 @@
     <div class='your-hand'>
         {% for hand_card in hand_cards %}
             {% if forloop.counter > 1 %}
-                <img class='card hand-card hand-overlap' src="{% static 'myapp/images/cards/' %}{{ hand_card.card.name }}.png" style="z-index: {{ forloop.counter }};" onclick="playCard('{{ hand_card.card.name }}')"></img>
+                <img class='card hand-card hand-overlap' src="{% static 'myapp/images/cards/' %}{{ hand_card.card.name }}.png" style="z-index: {{ forloop.counter }};" onclick="playCard('{{ hand_card.card.name }}')">
             {% else %}
-                <img class='card hand-card' src="{% static 'myapp/images/cards/' %}{{ hand_card.card.name }}.png" style="z-index: {{ forloop.counter }};" onclick="playCard('{{ hand_card.card.name }}')"></img>
+                <img class='card hand-card' src="{% static 'myapp/images/cards/' %}{{ hand_card.card.name }}.png" style="z-index: {{ forloop.counter }};" onclick="playCard('{{ hand_card.card.name }}')">
             {% endif %}
         {% endfor %}
     </div>

@@ -1,7 +1,7 @@
-from myapp.views.home import *
-from myapp.views.game import *
-from myapp.views.logout import *
-from myapp.views.room import *
+from myapp.views.home import home
+from myapp.views.game import display, gameAction
+from myapp.views.logout import logout
+from myapp.views.room import newRoom, leaveRoom
 from myapp.views.register import RegisterView
 
 from django.urls import path, re_path
@@ -18,12 +18,12 @@ urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
 
     # Gestion des rooms
-    path('room/', newroom, name='newroom'),
+    path('room/', newRoom, name='newroom'),
     path('room/<room_id>', display, name='room'),
     re_path(r'^room/(?P<room_id>[a-zA-Z0-9]{6})/$', display),  
-    path('leave/<room_id>', leaveroom, name='leave'),
-    re_path(r'^leave/(?P<room_id>[a-zA-Z0-9]{6})/$', leaveroom),
+    path('leave/<room_id>', leaveRoom, name='leave'),
+    re_path(r'^leave/(?P<room_id>[a-zA-Z0-9]{6})/$', leaveRoom),
 
     # Gestion des actions in-game
-    path('action/', game_action, name='action'),
+    path('action/', gameAction, name='action'),
 ]

@@ -2,18 +2,31 @@
 
 {% extends "myapp/game.html" %} {% block board %} {% load static %}
 <div class="on-gameboard">
-	{% for card in hand_cards %} 
-		{% if forloop.counter0 == bet.value %}
+	{% if data.bet.value == 0 %}
 			<button
 				type="button"
 				class="bet-buttons active"
-				value="{{ forloop.counter0 }}"
+				value="0"
 			>
-				{{ forloop.counter0 }}
+				0
 			</button>
 		{% else %}
-			<button type="button" class="bet-buttons" value="{{ forloop.counter0 }}">
-				{{ forloop.counter0 }}
+			<button type="button" class="bet-buttons" value="0">
+				0
+			</button>
+		{% endif %} 
+	{% for card in hand_cards %} 
+		{% if forloop.counter == data.bet.value %}
+			<button
+				type="button"
+				class="bet-buttons active"
+				value="{{ forloop.counter }}"
+			>
+				{{ forloop.counter }}
+			</button>
+		{% else %}
+			<button type="button" class="bet-buttons" value="{{ forloop.counter }}">
+				{{ forloop.counter }}
 			</button>
 		{% endif %} 
 	{% endfor %}

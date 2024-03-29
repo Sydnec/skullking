@@ -69,6 +69,7 @@ class Hand(models.Model): # Appartient à 1 joueur.
 class Trick(models.Model): # Appatient à 1 joueur (optionel) et 1 round
     player = models.ForeignKey(Player, on_delete=models.CASCADE, null=True)
     round = models.ForeignKey(Round, on_delete=models.CASCADE)
+    value = models.IntegerField(default=1, choices=[(i, i) for i in range(1, 11)])
 
 class Message(models.Model): # Appartient à 1 joueur et 1 room
     room = models.ForeignKey(Room, on_delete=models.CASCADE, blank=True, null=True)
