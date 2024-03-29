@@ -332,13 +332,10 @@ button:hover {
 	display: flex;
 	justify-content: center;
 }
-.room-buttons form {
-	width: 150px;
-	margin: 0 10px;
-}
-.room-buttons button {
+.room-button {
 	padding: 10px 20px;
-	width: 100%;
+	margin: 0 10px;
+	width: 150px;
 }
 /* TODO Game */
 .game-content {

@@ -10,11 +10,10 @@
 		// dataExample = {message: "update_rooms", data: {code: "H668Q6", usernames: ["Sydnec", "Player1"], message: "join"}}
 		if (data.data === 'start') {
 			location.reload();
-		}
-		else {
+		} else {
 			updateRoomList(data.data);
 		}
-		
+
 		function updateRoomList(roomData) {
 			switch (roomData.message) {
 				case 'leave':
@@ -57,7 +56,7 @@
 	};
 </script>
 <div class="room-content frame">
-	<h1>{{ room_id }}</h1>
+	<h1 id="room_id">{{ room_id }}</h1>
 	<ul id="room-username-list">
 		{% for username in usernames %}
 		<li class="username-list">{{ username }}</li>
@@ -65,15 +64,29 @@
 	</ul>
 	<div class="room-buttons">
 		{% if is_owner %}
-		<form action="/start/{{ room_id }}/" method="post">
-			{% csrf_token %}
-			<button type="submit" name="launch">Start</button>
-		</form>
+		<button class="room-button" name="launch" onclick="startRoom()">Start</button>
 		{% endif %}
 		<form action="/leave/{{ room_id }}/" method="post">
 			{% csrf_token %}
-			<button class="red-button" type="submit">Leave</button>
+			<button class="red-button room-button" type="submit">Leave</button>
 		</form>
 	</div>
 </div>
+<script>
+	function startRoom() {
+		const room_id = document.getElementById("room_id").innerText;
+
+		fetch('/action/', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'X-CSRFToken': '{{ csrf_token }}',
+			},
+			body: JSON.stringify({
+				action: 'start',
+				room_id: room_id,
+			}),
+		}).then((response) => response.json());
+	}
+</script>
 {% endblock content %}

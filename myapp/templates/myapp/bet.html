@@ -1,7 +1,6 @@
 <!-- myapp/templates/myapp/bet.html -->
 
 {% extends "myapp/game.html" %} {% block board %} {% load static %}
-<p id="timer" value="{{ start_timer }}"></p>
 <div class="on-gameboard">
 	{% for card in hand_cards %} 
 		{% if forloop.counter0 == bet.value %}
@@ -23,12 +22,7 @@
 	document.addEventListener('DOMContentLoaded', function () {
 		const buttons = document.querySelectorAll('.bet-buttons');
 		const room_id = document.querySelector('input[name="room_id"]').value;
-        const timerElement = document.getElementById('timer');
-
-        if(timerElement.getAttribute("value") == "True"){
-            startTimer();
-        }
-
+		
 		buttons.forEach((button) => {
 			button.addEventListener('click', function () {
 				buttons.forEach((btn) => {
@@ -54,42 +48,5 @@
 			});
 		});
 	});
-
-	function startTimer() {
-        const room_id = document.querySelector('input[name="room_id"]').value;
-        const timerElement = document.getElementById('timer');
-
-		var seconds = 10;
-        timerElement.textContent = seconds;
-
-		const countdown = setInterval(function () {
-			seconds--;
-			timerElement.textContent = seconds;
-
-            if (seconds >= 1 && seconds <= 3) {
-                timerElement.style.color = "red";
-            } else if (seconds >= 4 && seconds <= 6) {
-                timerElement.style.color = "yellow";
-            } else if (seconds >= 7 && seconds <= 10) {
-                timerElement.style.color = "white";
-            }
-
-			if (seconds <= 0) {
-				clearInterval(countdown);
-				timerElement.textContent = 0;
-				fetch('/action/', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-						'X-CSRFToken': '{{ csrf_token }}',
-					},
-					body: JSON.stringify({
-                        action: 'game_phase',
-						room_id: room_id,
-					}),
-				}).then((response) => response.json())
-			}
-		}, 1000);
-	}
 </script>
 {% endblock board %}

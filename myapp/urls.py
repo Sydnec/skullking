@@ -16,17 +16,13 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name='myapp/login.html'), name='login'),
     path('logout/', logout, name='logout'),
     path('register/', RegisterView.as_view(), name='register'),
-    
 
     # Gestion des rooms
     path('room/', newroom, name='newroom'),
-    path('room_redirect/', room_redirect, name='room_redirect'),
     path('room/<room_id>', display, name='room'),
     re_path(r'^room/(?P<room_id>[a-zA-Z0-9]{6})/$', display),  
     path('leave/<room_id>', leaveroom, name='leave'),
-    re_path(r'^leave/(?P<room_id>[a-zA-Z0-9]{6})/$', leaveroom),  
-    path('start/<room_id>', startgame, name='start'),
-    re_path(r'^start/(?P<room_id>[a-zA-Z0-9]{6})/$', startgame), 
+    re_path(r'^leave/(?P<room_id>[a-zA-Z0-9]{6})/$', leaveroom),
 
     # Gestion des appels websocket
     path('action/', game_action, name='action'),

@@ -112,7 +112,7 @@
 </script>
 <div class="home-content frame">
 	<div class="room-creation">
-		<form id="join-room-form" action="{% url 'room_redirect' %}" method="get">
+		<form id="join-room-form" action="/room/" method="get" onsubmit="updateAction()">
 			<label for="roomInput">Room code :</label>
 			<input type="text" id="code-input" name="content" />
 			<button type="submit">Join room</button>
@@ -141,5 +141,10 @@
 		</ul>
 	</div>
 </div>
-
+<script>
+	function updateAction() {
+		var codeInput = document.getElementById("code-input").value;
+		document.getElementById("join-room-form").action = "/room/" + codeInput;
+	}
+</script>
 {% endblock content %}
