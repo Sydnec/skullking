@@ -26,11 +26,11 @@ SECRET_KEY = '!4#q5!&k15_f#qe_kz-afv#qye_k+tekg1f2$%fxh6+a7l0y^8'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-DEBUG = True
-ALLOWED_HOSTS = []
+# DEBUG = True
+# ALLOWED_HOSTS = []
 
-# DEBUG = False
-# ALLOWED_HOSTS = ['*']
+DEBUG = False
+ALLOWED_HOSTS = ['127.0.0.1']
 
 # Application definition
 
@@ -132,6 +132,8 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
+
+STATIC_ROOT = '/home/sydnec/skullking/myapp/static/'
 
 STATIC_URL = '/static/'
 
