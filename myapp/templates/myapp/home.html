@@ -113,6 +113,7 @@
 <div class="home-content frame">
 	<div class="room-creation">
 		<form id="join-room-form" action="/room/" method="get" onsubmit="updateAction()">
+			{% csrf_token %}
 			<label for="roomInput">Room code :</label>
 			<input type="text" id="code-input" name="content" />
 			<button type="submit">Join room</button>

@@ -7,7 +7,6 @@ rm myapp/migrations/00*
 
 python manage.py makemigrations myapp
 python manage.py migrate
-python manage.py loaddata users
 python manage.py loaddata cards
 
 ./scripts/run.sh
