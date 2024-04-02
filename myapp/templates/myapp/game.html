@@ -11,7 +11,7 @@
     const room_id = parts[2]
 
     var socket = new ReconnectingWebSocket(
-        'ws://localhost:8001/ws/game_updates/'
+        `ws://${window.location.host}:8001/ws/game_updates/`
     );
     socket.onmessage = function (event) {
         const data = JSON.parse(event.data);
