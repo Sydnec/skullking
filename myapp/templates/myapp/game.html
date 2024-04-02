@@ -65,7 +65,7 @@
                             {% endfor %}
                         {% endwith %}
                         <p>
-                            {{ player.user.username }} {% if data.your_turn %}* {% endif %}: {% if data.tricks_number >= 0 %}{{ data.tricks_number }} / {{ data.bet.value }}{% else %}{% if data.bet %}Bet{% else %}No bet{% endif %}{% endif %}<br>
+                            {% if data.your_turn %}* {% endif %}{{ player.user.username }}: {% if data.tricks_number >= 0 %}{{ data.tricks_number }} / {{ data.bet.value }}{% else %}{% if data.bet %}Bet{% else %}No bet{% endif %}{% endif %}<br>
                         </p>
                     </div>
                 {% endif %}
