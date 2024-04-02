@@ -493,7 +493,6 @@ button:hover {
 	transform-origin: bottom center;
 	margin: 0;
 	padding: 0;
-	animation: tiltOne ease 1s;
 }
 .hand-card {
 	height: 150px;
