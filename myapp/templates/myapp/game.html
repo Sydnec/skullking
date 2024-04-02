@@ -51,7 +51,7 @@
                     </div>
                     {% block board %}{% endblock board %}
                     <div class="your-infos">
-                        <p>{{ data.tricks_number }} / {{ data.bet.value }}</p>
+                        <p>{{ data.tricks_number }} / {% if data.bet %}{{ data.bet.value }}{% else %}No bet{% endif %}</p>
                     </div>
                 {% else %}
                     {# Les autres joueurs #}
