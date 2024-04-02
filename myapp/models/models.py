@@ -49,6 +49,8 @@ class Round(models.Model): # Value : 1..10, Appartient à 1 room, Stock les bets
     bets = models.ManyToManyField('Bet', related_name='rounds', blank=True, limit_choices_to={'rounds__lt': 10})
     value = models.IntegerField(default=1, choices=[(i, i) for i in range(1, 11)])
     cards = models.ManyToManyField(Card, through='CardAssociation')
+    player = models.ForeignKey(Player, on_delete=models.CASCADE)
+    tigressOption = models.BooleanField(null=True, default=None)
 
 # Création automatique du set de carte à chaque nouveau round
 @receiver(post_save, sender=Round)

@@ -8,7 +8,11 @@
         {% else %}
         <div class="trick-card-content">
         {% endif %}
-            <img class='card trick-card' src="{% static 'myapp/images/cards/' %}{{ card_association.card.name }}.png" style="z-index: {{ forloop.counter }};" onclick="playCard('{{ card_association.card.name }}')"></img>
+        {% if card_association.card.name == "tigress" %}
+            <img class='card trick-card' src="{% static 'myapp/images/cards/' %}{{ card_association.card.name }}{% if card_association.trick.round.tigressOption %}1{% else %}0{% endif %}.png" style="z-index: {{ forloop.counter }};"></img>
+        {% else %}
+            <img class='card trick-card' src="{% static 'myapp/images/cards/' %}{{ card_association.card.name }}.png" style="z-index: {{ forloop.counter }};"></img>
+        {% endif %}
             <p class="card-owner">{{ card_association.hand.player.user.username }}</p>
         </div>
     {% endfor %}

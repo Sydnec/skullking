@@ -11,7 +11,7 @@
     const room_id = parts[2]
 
     var socket = new ReconnectingWebSocket(
-        'ws://localhost:8001/ws/game_updates/'
+        `ws://${window.location.host}:8001/ws/game_updates/`
     );
     socket.onmessage = function (event) {
         const data = JSON.parse(event.data);
@@ -32,19 +32,35 @@
             {% for player, data in players_data.items %}
                 {% if forloop.counter0 == 0 %}
                     {# Première itération donc player = moi #}
+                    {% if data.your_turn %}
+                        <h1 class="alert">YOUR TURN</h1>
+                    {% endif %}
+                    <div class="tigress-choice" style="display: None;">
+                        <img
+                            class="card big-card pirate"
+                            src="{% static 'myapp/images/cards/' %}tigress0.png"
+                            onclick="playCard('tigress0')"
+                        />
+                        <img
+                            class="card big-card escape"
+                            src="{% static 'myapp/images/cards/' %}tigress1.png"
+                            onclick="playCard('tigress1')"
+                        />
+                    </div>
                     {% block board %}{% endblock board %}
                 {% else %}
                     {# Les autres joueurs #}
-                    {% comment %}  rotate(180deg) translateY(-50px);  {% endcomment %}
                     <div class="player-hand" style="transform: translateX(calc(-75px + 35vw * cos(270deg - (({{ forloop.counter0 }} * 360deg) / {{ players_data|length }})))) translateY(calc(-25px + (-32vh * sin(270deg - (({{ forloop.counter0 }} * 360deg) / {{ players_data|length }}))))); z-index: {{ forloop.counter }};">
-                        {% comment %} style="transform: rotate(180deg) translateY(-8.9vh) translateX(-2.7vw)" {% endcomment %}
                         {% with ''|center:data.cards_number as range %}
+                        {% if not range %}
+                        <div style="height: max(11vh, 80px); margin-bottom: 6px"> </div>
+                        {% endif %}
                             {% for _ in range %}
-                                <img class="card player-card" src="{% static 'myapp/images/cards/back.png' %}" style="transform: rotate(calc(({{ data.cards_number }} - 1)* -5deg + {{ forloop.counter0 }} * 10deg)); z-index: {{ forloop.counter }};" />
+                                <img class="card player-card {% if forloop.counter0 > 0 %}overlap{% endif %}" src="{% static 'myapp/images/cards/back.png' %}" style="transform: rotate(calc(({{ data.cards_number }} - 1)* -5deg + {{ forloop.counter0 }} * 10deg)); z-index: {{ forloop.counter }};" />
                             {% endfor %}
                         {% endwith %}
                         <p>
-                            {{ player.user.username }} : {{ data.tricks_number }} / {% if data.bet %}{{ data.bet.value }}{% else %}No bet{% endif %}<br>
+                            {{ player.user.username }} {% if data.your_turn %}* {% endif %}: {{ data.tricks_number }} / {% if data.bet %}{{ data.bet.value }}{% else %}No bet{% endif %}<br>
                         </p>
                     </div>
                 {% endif %}
@@ -64,7 +80,7 @@
         <div id="scoreboard">
             <h2>Scoreboard</h2>
             {% for player, data in players_data.items %}
-                <p>{{ player.user.username }} : {{ player.score }}</p>
+                <p>{% if data.your_turn %}* {% endif %}{{ player.user.username }} : {{ player.score }}</p>
             {% endfor %}
         </div>
         <div id="message-box">
@@ -77,20 +93,27 @@
 <script>
 function playCard(cardName) {
     const room_id = document.querySelector('input[name="room_id"]').value
+    const tigress_choice = document.querySelector('.tigress-choice')
 
-    fetch('/action/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': '{{ csrf_token }}',
-        },
-        body: JSON.stringify({
-            action: 'play',
-            card_name: cardName,
-            room_id: room_id,
-        }),
-    })
-    .then((response) => response.json())
+    if(cardName==="tigress"){
+        tigress_choice.style.display = "block"
+    } else{
+        tigress_choice.style.display = "none"
+        console.log(cardName)
+        fetch('/action/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}',
+            },
+            body: JSON.stringify({
+                action: 'play',
+                card_name: cardName,
+                room_id: room_id,
+            }),
+        })
+        .then((response) => response.json())
+    }
 }
 function toggleHiddenRightPanel(){
     const button = document.getElementById('toggleHiddenRightPanel')

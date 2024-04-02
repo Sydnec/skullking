@@ -67,16 +67,6 @@ def gameData(request, room):
     
     players_data={}
 
-    for player in ordered_players:
-        players_data[player] = {
-            'cards_number': CardAssociation.objects.filter(hand__player=player, trick__isnull=True).count(),
-            'tricks_number': Trick.objects.filter(player=player, round=current_round).count(),
-        }
-        try:
-            players_data[player]['bet'] = Bet.objects.get(round=current_round, player=player)
-        except Bet.DoesNotExist:
-            players_data[player]['bet'] = None
-
     hand_cards = CardAssociation.objects.filter(round=current_round, hand__player=current_player, trick__isnull=True)
     trick_cards_ordered = None
     try:
@@ -88,10 +78,27 @@ def gameData(request, room):
         trick_cards_ordered = trick_cards.annotate(
             player_order=Case(*cases, default=len(ordered_players), output_field=models.IntegerField())
         ).order_by('player_order')
+        player_turn = playerTurn(trick)
     except Trick.DoesNotExist:
         phase = 1
         trick_cards = None
-        
+        if current_round.value > 1:
+            last_trick = Trick.objects.get(value=1, round__value=current_round.value-1, round__room= room)
+            player_turn = getOrderedPlayers(last_trick)[1]
+        else:
+            user_index = next((i for i, player in enumerate(players) if player.user == room.owner), None)
+            player_turn = players[user_index + 1]
+
+    for player in ordered_players:
+        players_data[player] = {
+            'cards_number': CardAssociation.objects.filter(hand__player=player, trick__isnull=True, round=current_round).count(),
+            'tricks_number': Trick.objects.filter(player=player, round=current_round).count(),
+            'your_turn': (player == player_turn)
+        }
+        try:
+            players_data[player]['bet'] = Bet.objects.get(round=current_round, player=player)
+        except Bet.DoesNotExist:
+            players_data[player]['bet'] = None
     data = {
         'room_id': room.code,
         'round_number': current_round.value,
@@ -110,7 +117,13 @@ def nextRound(room):
     if round_count == 10:
         return
     else:
-        new_round = Round.objects.create(room=room, value=round_count+1)
+        if round_count == 0:
+            dealer = Player.objects.get(user=room.owner, rooms=room)
+        else:
+            last_round = Round.objects.get(room=room, value=round_count)
+            ordered_player = getOrderedPlayers(Trick.objects.get(value=1, round=last_round))
+            dealer = ordered_player[0]
+        new_round = Round.objects.create(room=room, value=round_count+1, player=dealer)
         room.rounds.add(new_round)
         # Distribution des cartes
         distributeCards(room)
@@ -187,36 +200,46 @@ def playCard(request, room, data):
     except Trick.DoesNotExist:
         return
     # Vérifier tour de jeu
-    if isYourTurn(current_player, current_trick):
+    if playerTurn(current_trick) == current_player:
         card_name = data.get('card_name')
-        card_association = CardAssociation.objects.get(round=current_round, card=Card.objects.get(name=card_name))
-        card_association.trick = current_trick
-        card_association.save()
-        sendGameUpdate(room, 'new_card_played')
-        time.sleep(1)
-    if CardAssociation.objects.filter(round=current_round, trick=current_trick).count() == room.players.count() :
-        # Passer au tour suivant si tout le monde a joué
-        current_trick.player = defineTrickWinner(current_trick)
-        current_trick.save()
-        nextTrick(current_trick.value, current_round)
+        print(card_name)
+        if card_name == "tigress0" or card_name == "tigress1":
+            current_round.tigressOption = (card_name[7] == "1")
+            current_round.save()
+            card_name = "tigress"
+        card_association = CardAssociation.objects.get(round=current_round, card__name=card_name)
+        if canBePlayed(card_association, current_trick):
+            card_association.trick = current_trick
+            card_association.save()
+            sendGameUpdate(room, 'new_card_played')
+            time.sleep(1)
+            if CardAssociation.objects.filter(round=current_round, trick=current_trick).count() == room.players.count() :
+                # Passer au tour suivant si tout le monde a joué
+                current_trick.player = defineTrickWinner(current_trick)
+                current_trick.save()
+                nextTrick(current_trick.value, current_round)
 
 def getOrderedPlayers(trick):
     trick_number = trick.value
     players = trick.round.room.players.all()
     if trick_number == 1:
-        first_player = Player.objects.get(user=trick.round.room.owner, rooms=trick.round.room)
+        current_dealer = trick.round.player
+        user_index = next((i for i, player in enumerate(players) if player == current_dealer), None)
+        return list(players[user_index + 1:]) + list(players[:user_index]) + [current_dealer]
     else:
         last_trick = Trick.objects.get(round=trick.round, value=trick_number-1)
         first_player = last_trick.player
-    # Récupère l'ordre de jeu
-    user_index = next((i for i, player in enumerate(players) if player == first_player), None)
-    return [first_player] + list(players[user_index + 1:]) + list(players[:user_index])
+        user_index = next((i for i, player in enumerate(players) if player == first_player), None)
+        return [first_player] + list(players[user_index + 1:]) + list(players[:user_index])
 
 def defineTrickWinner(trick):
     max_card = None
     ordered_players = getOrderedPlayers(trick)
     # Cartes spéciales
     pirates = CardAssociation.objects.filter(trick=trick, card__type="pirate") 
+    if trick.round.tigressOption:
+        tigresses = CardAssociation.objects.filter(trick=trick, card__type="tigress")
+        pirates = pirates.union(tigresses)
     sirens = CardAssociation.objects.filter(trick=trick, card__type="siren") 
     skullking = CardAssociation.objects.filter(trick=trick, card__type="skullking")
     if skullking.exists() or (sirens.exists() and not pirates.exists()):
@@ -257,23 +280,38 @@ def defineTrickWinner(trick):
         max_card = CardAssociation.objects.get(hand__player=ordered_players[0], trick=trick)
     return max_card.hand.player
 
-def isYourTurn(current_player, trick):
-    # Vérifier que le joueur n'a pas encore joué
-    if CardAssociation.objects.filter(trick=trick, hand__player=current_player).exists(): 
-        return False
+def playerTurn(trick):
+    if trick is None:
+        return None
+    ordered_players = getOrderedPlayers(trick)
+    if CardAssociation.objects.filter(trick=trick).exists() == False: # Premier jouer à jouer
+        return ordered_players[0]
+    else: # Un joueur ou plus à déjà joué
+        for player in ordered_players:
+            if not CardAssociation.objects.filter(hand__player=player, trick=trick).exists():
+                return player
 
-    # Si personne n'a encore joué ce tour
-    if CardAssociation.objects.filter(trick=trick).exists() == False:
-        trick_number = trick.value
-        if trick_number == 1:
-            return trick.round.room.owner == current_player.user
-        else:
-            last_trick = Trick.objects.get(round=trick.round, value=trick_number-1)
-            return last_trick.player == current_player
+def canBePlayed(played_card, trick):
+    colors = ["black", "green", "purple", "yellow"]
+    if not CardAssociation.objects.filter(trick=trick).exists(): # Premier à jouer
+        return True
+    if played_card.card.type not in colors: # Joue une carte spéciale
+        return True
     else:
         ordered_players = getOrderedPlayers(trick)
-        index_player = next((i for i, player in enumerate(ordered_players) if player == current_player), None)
-        return CardAssociation.objects.filter(trick=trick, hand__player=ordered_players[index_player - 1]).exists()
+        for player in ordered_players:
+            try:
+                asked_color = CardAssociation.objects.get(round=trick.round, hand__player=player, trick=trick).card.type
+                # Ne reporte le choix de la couleur demandé que si fuite
+                if not (asked_color == "escape" or (asked_color == "tigress" and trick.round.tigressOption == 0)):
+                    break
+            except CardAssociation.DoesNotExist:
+                break
+        if asked_color not in colors: # Il n'y a pas encore eu de carte de couleur de jouée
+            return True
+        hand = CardAssociation.objects.filter(round=trick.round, hand=played_card.hand, trick__isnull=True)
+        if asked_color != played_card.card.type and hand.filter(card__type=asked_color).exists():
+            return False
     return True
 
 def bet(request, room, data):
@@ -313,13 +351,17 @@ def calculScore(current_round):
                         player.score += 10
                 skullkingWinnerTrick = CardAssociation.objects.filter(card__type="skullking",  round=current_round, trick__player=player, hand__player=player)
                 if skullkingWinnerTrick.exists():
-                    player.score += CardAssociation.objects.filter(card__type="pirate", trick=skullkingWinnerTrick.first().trick) * 30
+                    piratesInTrick = CardAssociation.objects.filter(card__type="pirate", trick=skullkingWinnerTrick.first().trick)
+                    if current_round.tigressOption:
+                        tigresses = CardAssociation.objects.filter(card__type="tigress", trick=skullkingWinnerTrick.first().trick)
+                        piratesInTrick = piratesInTrick.union(tigresses)
+                    player.score += piratesInTrick.count() * 30
                 sirenWinnerTricks = CardAssociation.objects.filter(card__type="siren",  round=current_round, trick__player=player, hand__player=player)
                 for sirenTrick in sirenWinnerTricks:
-                    player.score += CardAssociation.objects.filter(card__type="skullking", trick=sirenTrick).exists() * 40
+                    player.score += CardAssociation.objects.filter(card__type="skullking", trick=sirenTrick.trick).exists() * 40
                 pirateWinnerTricks = CardAssociation.objects.filter(card__type="pirate",  round=current_round, trick__player=player, hand__player=player)
                 for pirateTrick in pirateWinnerTricks:
-                    player.score += CardAssociation.objects.filter(card__type="siren", trick=pirateTrick).count() * 20
+                    player.score += CardAssociation.objects.filter(card__type="siren", trick=pirateTrick.trick).count() * 20
         else:
             # Pari raté
             if bet.value == 0: # - 10 points par carte
