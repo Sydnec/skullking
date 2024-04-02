@@ -365,6 +365,21 @@ button:hover {
 	height: 150px;
 	padding: auto;
 }
+.turn-alert {
+	position: absolute;
+	top: 0;
+	margin: 30px;
+	z-index: 11;
+	right: 0;
+	left: 0;
+	width: 100%;
+}
+.your-infos {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	margin: 10px;
+}
 .on-gameboard {
 	position: absolute;
 	right: 0;
@@ -381,7 +396,7 @@ button:hover {
 	box-shadow: 0 0 5px var(--main-color), 0 0 25px var(--main-color);
 }
 #toggleHiddenRightPanel {
-	font-family: "Nanum Gothic Coding", monospace;
+	font-family: 'Nanum Gothic Coding', monospace;
 	font-weight: 600;
 	font-style: normal;
 	background-color: white;
@@ -398,12 +413,32 @@ button:hover {
 	border-radius: 0;
 	box-shadow: none;
 	justify-content: center;
-    align-items: center;
+	align-items: center;
 }
 #toggleHiddenRightPanel:hover {
 	color: black;
 	border-radius: 0;
 	box-shadow: none;
+}
+#toggleHierachie {
+	background-color: white;
+	color: black;
+	position: absolute;
+	font-size: 15px;
+	bottom: 0;
+	left: 0;
+	margin: 0px 10px;
+	justify-content: center;
+	align-items: center;
+	box-shadow: none;
+}
+#toggleHierachie:hover, #toggleHierachie.active {
+	box-shadow: 0 0 10px white;
+}
+#hierarchie-memo {
+	position: absolute;
+	height: 90%;
+	left: 0;
 }
 /* TODO Affichage des cartes */
 .card {
@@ -411,7 +446,7 @@ button:hover {
 	border: 0.5px solid black;
 }
 .tigress-choice {
-	z-index: 999;
+	z-index: 12;
 	background-color: #ffffff6a;
 	position: absolute;
 	top: 0;
@@ -432,15 +467,19 @@ button:hover {
 	margin: 14vh calc(6.2vw - 1vh);
 }
 .big-card.pirate:hover {
-	box-shadow: 0 0 5px var(--tigress-pirate-color), 0 0 25px var(--tigress-pirate-color), 0 0 50px var(--tigress-pirate-color);
+	box-shadow: 0 0 5px var(--tigress-pirate-color),
+		0 0 25px var(--tigress-pirate-color),
+		0 0 50px var(--tigress-pirate-color);
 }
 .big-card.escape:hover {
-	box-shadow: 0 0 5px var(--tigress-escape-color), 0 0 25px var(--tigress-escape-color), 0 0 50px var(--tigress-escape-color);
+	box-shadow: 0 0 5px var(--tigress-escape-color),
+		0 0 25px var(--tigress-escape-color),
+		0 0 50px var(--tigress-escape-color);
 }
 .player-card {
-	height: max(11vh, 80px); 
+	height: max(11vh, 80px);
 	/* position: absolute; */
-    transform-origin: center;
+	transform-origin: center;
 	margin: 0;
 	padding: 0;
 }
@@ -451,20 +490,20 @@ button:hover {
 	position: absolute;
 	top: 50%;
 	left: 50%;
-    transform-origin: bottom center;
+	transform-origin: bottom center;
 	margin: 0;
 	padding: 0;
 	animation: tiltOne ease 1s;
 }
 .hand-card {
 	height: 150px;
-    display: inline-block;
-    position: relative;
-    transition: transform 0.3s ease; 
+	display: inline-block;
+	position: relative;
+	transition: transform 0.3s ease;
 }
 .hand-card:hover {
-    cursor: pointer;
-    transform: translateY(-50px);
+	cursor: pointer;
+	transform: translateY(-50px);
 }
 .hand-overlap {
 	margin-left: min(calc(-120px + 10vw), -25px);
@@ -476,8 +515,8 @@ button:hover {
 }
 .trick-card {
 	height: 130px;
-    display: block;
-    transition: transform 0.3s ease; 
+	display: block;
+	transition: transform 0.3s ease;
 }
 .trick-overlap {
 	margin-left: min(calc(-90px + 10vw), 0px);
@@ -506,16 +545,16 @@ button:hover {
 	font-size: 18px;
 	margin: 5px;
 }
-#message-box{
+#message-box {
 	height: 100%;
 	display: grid;
 	grid-template-rows: auto 1fr auto;
 }
-#message-box input{
+#message-box input {
 	width: 80%;
 	margin: auto;
 	margin-bottom: 1vh;
 }
-#message-box ul{
+#message-box ul {
 	overflow: scroll;
 }

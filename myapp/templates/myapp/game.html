@@ -23,7 +23,9 @@
 <div class="game-content">
     <div class="left-panel">
         <div class="game-board">
-            <button id="toggleHiddenRightPanel" onclick="toggleHiddenRightPanel()" style="z-index: 10">></button>
+            <button id="toggleHiddenRightPanel" onclick="toggleHiddenRightPanel()" style="z-index: 11">></button>
+            <button id="toggleHierachie" onclick="toggleHierachie()" style="z-index: 11">hierarchie</button>
+            <img id="hierarchie-memo" style="display: none;" src="{% static 'myapp/images/hierarchie.png' %}"/>
             <input
                 type="hidden"
                 name="room_id"
@@ -32,8 +34,8 @@
             {% for player, data in players_data.items %}
                 {% if forloop.counter0 == 0 %}
                     {# Première itération donc player = moi #}
-                    {% if data.your_turn %}
-                        <h1 class="alert">YOUR TURN</h1>
+                    {% if data.your_turn and data.tricks_number >= 0 %}
+                        <h1 class="alert turn-alert">YOUR TURN</h1>
                     {% endif %}
                     <div class="tigress-choice" style="display: None;">
                         <img
@@ -48,6 +50,9 @@
                         />
                     </div>
                     {% block board %}{% endblock board %}
+                    <div class="your-infos">
+                        <p>{{ data.tricks_number }} / {{ data.bet.value }}</p>
+                    </div>
                 {% else %}
                     {# Les autres joueurs #}
                     <div class="player-hand" style="transform: translateX(calc(-75px + 35vw * cos(270deg - (({{ forloop.counter0 }} * 360deg) / {{ players_data|length }})))) translateY(calc(-25px + (-32vh * sin(270deg - (({{ forloop.counter0 }} * 360deg) / {{ players_data|length }}))))); z-index: {{ forloop.counter }};">
@@ -60,7 +65,7 @@
                             {% endfor %}
                         {% endwith %}
                         <p>
-                            {{ player.user.username }} {% if data.your_turn %}* {% endif %}: {{ data.tricks_number }} / {% if data.bet %}{{ data.bet.value }}{% else %}No bet{% endif %}<br>
+                            {{ player.user.username }} {% if data.your_turn %}* {% endif %}: {% if data.tricks_number >= 0 %}{{ data.tricks_number }} / {{ data.bet.value }}{% else %}{% if data.bet %}Bet{% else %}No bet{% endif %}{% endif %}<br>
                         </p>
                     </div>
                 {% endif %}
@@ -121,6 +126,13 @@ function toggleHiddenRightPanel(){
 
     rightPanel.style.display = rightPanel.style.display === "none" ? "block" : "none";
     button.textContent = rightPanel.style.display === "none" ? "<" : ">";
+}
+function toggleHierachie(){
+    const button = document.getElementById('toggleHierachie')
+    const memo = document.getElementById('hierarchie-memo')
+
+    memo.style.display = memo.style.display === "none" ? "block" : "none";
+    button.classList.toggle("active");
 }
 </script>
 {% endblock content %}

@@ -92,7 +92,7 @@ def gameData(request, room):
     for player in ordered_players:
         players_data[player] = {
             'cards_number': CardAssociation.objects.filter(hand__player=player, trick__isnull=True, round=current_round).count(),
-            'tricks_number': Trick.objects.filter(player=player, round=current_round).count(),
+            'tricks_number': None if phase == 1 else Trick.objects.filter(player=player, round=current_round).count(),
             'your_turn': (player == player_turn)
         }
         try:

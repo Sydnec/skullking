@@ -4,3 +4,4 @@ __pycache__
 users.yaml
 *.txt
 0*.py
+server.sh
