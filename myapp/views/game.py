@@ -173,15 +173,7 @@ def gameAction(request):
 def startGame(room):
     if 1 < room.players.count() < 8:
         nextRound(room)
-        # Envoi de l'update sur websocket
-        channel_layer = get_channel_layer()
-        async_to_sync(channel_layer.group_send)(
-            'update_room_group',
-            {
-                'type': 'update_rooms',
-                'data': 'start'
-            }
-        )
+        sendRoomUpdates(room, "start")
 
 def gamePhase(current_round):
     nextTrick(0, current_round)

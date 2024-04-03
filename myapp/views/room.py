@@ -59,7 +59,7 @@ def sendRoomUpdates(room, message):
     channel_layer = get_channel_layer()
     usernames = [player.user.username for player in room.players.all()]
     data = {
-        'code': room.code,
+        'room_id': room.code,
         'usernames': usernames,
         'message': message
     }

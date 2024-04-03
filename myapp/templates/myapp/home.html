@@ -7,7 +7,7 @@
 	);
 	socket.onmessage = function (event) {
 		var data = JSON.parse(event.data);
-		// dataExample = {message: "update_rooms", data: {code: "H668Q6", usernames: ["Sydnec", "Player1"], message: "join"}}
+		// dataExample = {message: "update_rooms", data: {room_id: "H668Q6", usernames: ["Sydnec", "Player1"], message: "join"}}
 		if (data.message === 'update_rooms') {
 			var roomData = data.data;
 			updateRoomList(roomData);
@@ -16,9 +16,9 @@
 		function createRoomLi(roomData) {
 			// Créer l'élément li
 			var li = document.createElement('li');
-			li.classList.add('room-line-content', "code-" + roomData.code);
+			li.classList.add('room-line-content', "code-" + roomData.room_id);
 			var div = document.createElement('div');
-			div.classList.add('player-list-line', "code-" + roomData.code);
+			div.classList.add('player-list-line', "code-" + roomData.room_id);
 			// Ajouter les noms d'utilisateur à l'intérieur de la div
 			roomData.usernames.forEach(function (username) {
 				var span = document.createElement('span');
@@ -28,7 +28,7 @@
 			});
 			// Créer le formulaire
 			var form = document.createElement('form');
-			form.action = '/room/' + roomData.code + '/';
+			form.action = '/room/' + roomData.room_id + '/';
 			form.method = 'post';
 
 			// Ajouter le token CSRF
@@ -42,7 +42,7 @@
 			var roomIdInput = document.createElement('input');
 			roomIdInput.type = 'hidden';
 			roomIdInput.name = 'room_id';
-			roomIdInput.value = roomData.code;
+			roomIdInput.value = roomData.room_id;
 			form.appendChild(roomIdInput);
 
 			// Créer le bouton pour rejoindre la salle
@@ -63,7 +63,7 @@
 				case 'leave':
 					document
 						.querySelectorAll(
-							`.player-list-line.code-${roomData.code} .username-line`
+							`.player-list-line.code-${roomData.room_id} .username-line`
 						)
 						.forEach(function (element) {
 							if (
@@ -78,7 +78,7 @@
 				case 'join':
 					document
 						.querySelectorAll(
-							`.player-list-line.code-${roomData.code} .username-line`
+							`.player-list-line.code-${roomData.room_id} .username-line`
 						)
 						.forEach(function (element) {
 							element.remove();
@@ -88,7 +88,7 @@
 						spanElement.className = 'username-line';
 						spanElement.textContent = username;
 						var playerList = document.querySelector(
-							`.player-list-line.code-${roomData.code}`
+							`.player-list-line.code-${roomData.room_id}`
 						);
 						playerList.appendChild(spanElement);
 					});
@@ -99,7 +99,7 @@
 					break;
 				case 'delete':
 					var roomLine = document.querySelector(
-						`.room-line-content.code-${roomData.code}`
+						`.room-line-content.code-${roomData.room_id}`
 					);
 					roomLine.remove();
 					break;

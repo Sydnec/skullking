@@ -6,12 +6,11 @@
 		`ws://${window.location.host}:8001/ws/room_updates/`
 	);
 	socket.onmessage = function (event) {
-		var data = JSON.parse(event.data);
-		// dataExample = {message: "update_rooms", data: {code: "H668Q6", usernames: ["Sydnec", "Player1"], message: "join"}}
-		if (data.data === 'start') {
+		const data = JSON.parse(event.data).data;
+		if (data.message === "start") {
 			// Faire une requête AJAX à la fonction display()
 			$.ajax({
-				url: '/room/' + data.code, // Remplacez par l'URL de votre fonction display()
+				url: '/room/' + data.room_id, // Remplacez par l'URL de votre fonction display()
 				type: 'GET',
 				success: function (response) {
 					// Remplacez tout le contenu de la page avec la réponse de la fonction display()
@@ -21,7 +20,8 @@
 				},
 			});
 		} else {
-			updateRoomList(data.data);
+			// dataExample = {message: "update_rooms", data: {room_id: "H668Q6", usernames: ["Sydnec", "Player1"], message: "join"}}
+			updateRoomList(data);
 		}
 
 		function updateRoomList(roomData) {
