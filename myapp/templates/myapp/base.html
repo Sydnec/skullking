@@ -35,15 +35,21 @@
 					/>
 					<p>Skullking</p>
 				</a>
+				<a
+					id="rules"
+					href="https://www.play-in.com/pdf/rules_games/skull_king_regles_fr.pdf"
+					target="_blank"
+					>Rules</a
+				>
 			</div>
 			<div class="navbar-right">
 				<!-- show registration only if user is not yet authenticated -->
 				{% if not user.is_authenticated %}
 				<ul class="navbar-nav">
 					<li class="active">
-						<a id="register-button" href="{% url 'register' %}"
-							>Registration</a
-						>
+						<a id="register-button" href="{% url 'register' %}">
+							Registration
+						</a>
 					</li>
 				</ul>
 				{% endif %}
@@ -70,8 +76,6 @@
 		</nav>
 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js"></script>
-		<div id="content">
-			{% block content %}{% endblock %}
-		</div>
+		<div id="content">{% block content %}{% endblock %}</div>
 	</body>
 </html>

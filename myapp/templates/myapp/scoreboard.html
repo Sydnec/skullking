@@ -1,0 +1,22 @@
+<!-- myapp/templates/myapp/scoreboard.html -->
+
+{% extends "myapp/base.html" %} {% block content %} {% load static %}
+<div class="leaderboard frame">
+	<h2>Leaderboard</h2>
+	<ul>
+		{% for player in players %}
+		<li class="name">
+			{{ player.user.username }}<span class="score"
+				>{{ player.score }}</span
+			>
+		</li>
+		{% endfor %}
+	</ul>
+	<div class="leaderboard-footer">
+		<a href="{% url 'home' %}"
+			><button>Back to home</button></a
+		>
+	</div>
+</div>
+
+{% endblock content %}

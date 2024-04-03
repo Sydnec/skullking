@@ -144,6 +144,15 @@ button:hover {
 	text-align: center;
 	padding: 0px 10px;
 }
+#rules {
+	color: #f2f2f2;
+	text-align: center;
+	padding: 14px 16px;
+	margin: 0px 20px;
+}
+#rules:hover {
+	background-color: #222;
+}
 /* TODO Log button */
 .navbar-right {
 	float: right;
@@ -380,6 +389,7 @@ button:hover {
 	right: 0;
 	bottom: 0;
 	margin: 10px;
+	text-align: right;
 }
 .on-gameboard {
 	position: absolute;
@@ -433,7 +443,8 @@ button:hover {
 	align-items: center;
 	box-shadow: none;
 }
-#toggleHierachie:hover, #toggleHierachie.active {
+#toggleHierachie:hover,
+#toggleHierachie.active {
 	box-shadow: 0 0 10px white;
 }
 #hierarchie-memo {
@@ -486,7 +497,7 @@ button:hover {
 	padding: 0;
 }
 .player-card.overlap {
-	margin-left: calc(max(11vh, 80px) * -125/200);
+	margin-left: calc(max(11vh, 80px) * -125 / 200);
 }
 .player-hand {
 	position: absolute;
@@ -558,4 +569,83 @@ button:hover {
 }
 #message-box ul {
 	overflow: scroll;
+}
+/* TODO Leaderboard */
+.leaderboard {
+	background-color: #0c1725;
+	color: #eee;
+	width: 400px;
+	padding: 20px 0px;
+	text-align: left;
+	display: inline-block;
+	vertical-align: middle;
+	border-radius: 15px;
+}
+.leaderboard h2 {
+	padding: 15px 0;
+	margin: 0;
+	text-align: center;
+}
+.leaderboard ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+.leaderboard ul li {
+	counter-increment: leaderboard-num;
+	padding: 30px 70px;
+	position: relative;
+	transition-duration: 0.3s;
+}
+.leaderboard ul li::before {
+	content: counter(leaderboard-num);
+	display: block;
+	border-radius: 50%;
+	width: 25px;
+	height: 25px;
+	background-color: white;
+	color: #345;
+	text-align: center;
+	position: absolute;
+	left: 15px;
+}
+.leaderboard ul li:nth-of-type(1) {
+	background-color: #204161;
+}
+.leaderboard ul li:nth-of-type(2) {
+	background-color: #1e3c59;
+}
+.leaderboard ul li:nth-of-type(3) {
+	background-color: #1b3652;
+}
+.leaderboard ul li:nth-of-type(4) {
+	background-color: #19314a;
+}
+.leaderboard ul li:nth-of-type(5) {
+	background-color: #162c42;
+}
+.leaderboard ul li:nth-of-type(6) {
+	background-color: #14273b;
+}
+.leaderboard ul li:nth-of-type(7) {
+	background-color: #112234;
+}
+.leaderboard ul li:nth-of-type(8) {
+	background-color: #0f1d2d;
+}
+
+.leaderboard ul li .score {
+	position: absolute;
+	right: 15px;
+}
+.leaderboard ul li:hover {
+	transform: scale(1.1);
+}
+.leaderboard ul:hover li:not(:hover) {
+	opacity: 0.3;
+}
+.leaderboard-footer {
+	width: 100%;
+	text-align: center;
+	margin-top: 20px;
 }

@@ -60,6 +60,7 @@ def gameData(request, room):
         current_round = room.rounds.all().latest('value')
     except Round.DoesNotExist:
         return error(request, "You can't play alone")
+
     current_player = Player.objects.get(user=user, rooms=room)
     user_index = next((i for i, player in enumerate(players) if player == current_player), None)
     if user_index is not None:
@@ -89,27 +90,34 @@ def gameData(request, room):
             user_index = next((i for i, player in enumerate(players) if player.user == room.owner), None)
             player_turn = players[user_index + 1]
 
-    for player in ordered_players:
-        players_data[player] = {
-            'cards_number': CardAssociation.objects.filter(hand__player=player, trick__isnull=True, round=current_round).count(),
-            'tricks_number': None if phase == 1 else Trick.objects.filter(player=player, round=current_round).count(),
-            'your_turn': (player == player_turn)
+    if not (current_round.value >= 10 and not trick.player is None):
+        for player in ordered_players:
+            players_data[player] = {
+                'cards_number': CardAssociation.objects.filter(hand__player=player, trick__isnull=True, round=current_round).count(),
+                'tricks_number': None if phase == 1 else Trick.objects.filter(player=player, round=current_round).count(),
+                'your_turn': (player == player_turn)
+            }
+            try:
+                players_data[player]['bet'] = Bet.objects.get(round=current_round, player=player)
+            except Bet.DoesNotExist:
+                players_data[player]['bet'] = None
+        data = {
+            'room_id': room.code,
+            'round_number': current_round.value,
+            'hand_cards': hand_cards,
+            'trick_cards': trick_cards_ordered,
+            'players_data':players_data,
         }
-        try:
-            players_data[player]['bet'] = Bet.objects.get(round=current_round, player=player)
-        except Bet.DoesNotExist:
-            players_data[player]['bet'] = None
-    data = {
-        'room_id': room.code,
-        'round_number': current_round.value,
-        'hand_cards': hand_cards,
-        'trick_cards': trick_cards_ordered,
-        'players_data':players_data,
-    }
-    if phase == 1:
-        return render(request, 'myapp/bet.html', data)
-    elif phase == 2:
-        return render(request, 'myapp/table.html', data)
+        if phase == 1:
+            return render(request, 'myapp/bet.html', data)
+        elif phase == 2:
+            return render(request, 'myapp/table.html', data)
+    else:
+        data = {
+            'room_id': room.code,
+            'players': players.order_by('-score'),
+        }
+        return render(request, 'myapp/scoreboard.html', data)
 
 def nextRound(room):
     # Création du round

@@ -63,6 +63,7 @@
                     </div>
                     {% block board %}{% endblock board %}
                     <div class="your-infos">
+                        <p>Round {{ round_number }}</p>
                         <p>Tricks : {{ data.tricks_number }} / {% if data.bet %}Bet : {{ data.bet.value }}{% else %}No bet{% endif %}</p>
                     </div>
                 {% else %}
@@ -102,7 +103,14 @@
         </div>
         <div id="message-box">
             <h2>Messages</h2>
-            <ul></ul>
+            <ul>
+                <li>Salut</li>
+                <li>ça va ?</li>
+                <li>oui et toi ?</li>
+                <li>oui tfk ?</li>
+                <li>rien et toi ?</li>
+                <li>rien</li>
+            </ul>
             <input></input>
         </div>
     </div>
