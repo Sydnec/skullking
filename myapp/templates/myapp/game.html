@@ -11,12 +11,24 @@
     const room_id = parts[2]
 
     var socket = new ReconnectingWebSocket(
-        `ws://${window.location.host}:8001/ws/game_updates/`
+        `ws://localhost:8001/ws/game_updates/`
     );
     socket.onmessage = function (event) {
         const data = JSON.parse(event.data);
+        var message = data['message'];
+        
         if (data.room_id == room_id) {
-            location.reload();
+            // Faire une requête AJAX à la fonction display()
+            $.ajax({
+                url: '/room/' + data.room_id,  // Remplacez par l'URL de votre fonction display()
+                type: 'GET',
+                success: function(response) {
+                    // Remplacez tout le contenu de la page avec la réponse de la fonction display()
+                    document.open();
+                    document.write(response);
+                    document.close();
+                }
+            });
         }
     }
 </script>
@@ -51,7 +63,7 @@
                     </div>
                     {% block board %}{% endblock board %}
                     <div class="your-infos">
-                        <p>{{ data.tricks_number }} / {% if data.bet %}{{ data.bet.value }}{% else %}No bet{% endif %}</p>
+                        <p>Tricks : {{ data.tricks_number }} / {% if data.bet %}Bet : {{ data.bet.value }}{% else %}No bet{% endif %}</p>
                     </div>
                 {% else %}
                     {# Les autres joueurs #}
@@ -104,7 +116,6 @@ function playCard(cardName) {
         tigress_choice.style.display = "block"
     } else{
         tigress_choice.style.display = "none"
-        console.log(cardName)
         fetch('/action/', {
             method: 'POST',
             headers: {

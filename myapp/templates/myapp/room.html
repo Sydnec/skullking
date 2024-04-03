@@ -3,13 +3,23 @@
 {% extends "myapp/base.html" %} {% block content %}
 <script>
 	var socket = new ReconnectingWebSocket(
-		`ws://${window.location.host}:8001/ws/room_updates/`
+		`ws://localhost:8001/ws/room_updates/`
 	);
 	socket.onmessage = function (event) {
 		var data = JSON.parse(event.data);
 		// dataExample = {message: "update_rooms", data: {code: "H668Q6", usernames: ["Sydnec", "Player1"], message: "join"}}
 		if (data.data === 'start') {
-			location.reload();
+			// Faire une requête AJAX à la fonction display()
+			$.ajax({
+				url: '/room/' + data.room_id, // Remplacez par l'URL de votre fonction display()
+				type: 'GET',
+				success: function (response) {
+					// Remplacez tout le contenu de la page avec la réponse de la fonction display()
+					document.open();
+					document.write(response);
+					document.close();
+				},
+			});
 		} else {
 			updateRoomList(data.data);
 		}
@@ -64,7 +74,9 @@
 	</ul>
 	<div class="room-buttons">
 		{% if is_owner %}
-		<button class="room-button" name="launch" onclick="startRoom()">Start</button>
+		<button class="room-button" name="launch" onclick="startRoom()">
+			Start
+		</button>
 		{% endif %}
 		<form action="/leave/{{ room_id }}/" method="post">
 			{% csrf_token %}
@@ -74,7 +86,7 @@
 </div>
 <script>
 	function startRoom() {
-		const room_id = document.getElementById("room_id").innerText;
+		const room_id = document.getElementById('room_id').innerText;
 
 		fetch('/action/', {
 			method: 'POST',
