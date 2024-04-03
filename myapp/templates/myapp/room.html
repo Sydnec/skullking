@@ -11,7 +11,7 @@
 		if (data.data === 'start') {
 			// Faire une requête AJAX à la fonction display()
 			$.ajax({
-				url: '/room/' + data.room_id, // Remplacez par l'URL de votre fonction display()
+				url: '/room/' + data.code, // Remplacez par l'URL de votre fonction display()
 				type: 'GET',
 				success: function (response) {
 					// Remplacez tout le contenu de la page avec la réponse de la fonction display()
