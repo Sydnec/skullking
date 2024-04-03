@@ -3,7 +3,7 @@
 {% extends "myapp/base.html" %} {% block content %}
 <script>
 	var socket = new ReconnectingWebSocket(
-		`ws://localhost:8001/ws/room_updates/`
+		`ws://${window.location.host}:8001/ws/room_updates/`
 	);
 	socket.onmessage = function (event) {
 		var data = JSON.parse(event.data);
