@@ -36,7 +36,7 @@
     <div class="left-panel">
         <div class="game-board">
             <button id="toggleHiddenRightPanel" onclick="toggleHiddenRightPanel()" style="z-index: 11">></button>
-            <button id="toggleHierachie" onclick="toggleHierachie()" style="z-index: 11">hierarchie</button>
+            <button id="toggleHierachie" onclick="toggleHierachie()" style="z-index: 11">Hierarchy</button>
             <img id="hierarchie-memo" style="display: none;" src="{% static 'myapp/images/hierarchie.png' %}"/>
             <input
                 type="hidden"
@@ -104,12 +104,12 @@
         <div id="message-box">
             <h2>Messages</h2>
             <ul>
-                <li>Salut</li>
-                <li>ça va ?</li>
-                <li>oui et toi ?</li>
-                <li>oui tfk ?</li>
-                <li>rien et toi ?</li>
-                <li>rien</li>
+                <li><span class="chat-username">Sydnec : </span><span class="chat-message">Salut</span></li>
+                <li><span class="chat-username">Sydnec : </span><span class="chat-message">ça va ?</span></li>
+                <li><span class="chat-username">Sydnec : </span><span class="chat-message">oui et toi ?</span></li>
+                <li><span class="chat-username">Sydnec : </span><span class="chat-message">oui tfk ?</span></li>
+                <li><span class="chat-username">Sydnec : </span><span class="chat-message">rien et toi ?</span></li>
+                <li><span class="chat-username">Sydnec : </span><span class="chat-message">rien</span></li>
             </ul>
             <input></input>
         </div>

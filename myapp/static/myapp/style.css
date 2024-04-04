@@ -568,6 +568,8 @@ button:hover {
 	margin-bottom: 1vh;
 }
 #message-box ul {
+	margin: 5px;
+	text-align: left;
 	overflow: scroll;
 }
 /* TODO Leaderboard */

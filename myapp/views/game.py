@@ -129,6 +129,7 @@ def nextRound(room):
             dealer = Player.objects.get(user=room.owner, rooms=room)
         else:
             last_round = Round.objects.get(room=room, value=round_count)
+            if not Trick.objects.filter(round=last_round).count() == last_round.value(): return
             ordered_player = getOrderedPlayers(Trick.objects.get(value=1, round=last_round))
             dealer = ordered_player[0]
         new_round = Round.objects.create(room=room, value=round_count+1, player=dealer)
@@ -142,7 +143,7 @@ def nextTrick(trick_number, current_round):
         betPhase(current_round.room)
     else:
         time.sleep(2)
-        if not Trick.objects.filter(round=current_round, value=trick_number + 1).exists():
+        if not Trick.objects.get(round=current_round, value=trick_number).player is None and not Trick.objects.filter(round=current_round, value=trick_number + 1).exists():
             Trick.objects.create(round=current_round, value=trick_number + 1)
             sendGameUpdate(current_round.room, 'next_trick')
 
