@@ -90,7 +90,7 @@ def gameData(request, room):
             user_index = next((i for i, player in enumerate(players) if player.user == room.owner), None)
             player_turn = players[user_index + 1]
 
-    if not (current_round.value >= 10 and not trick.player is None):
+    if not (current_round.value >= 10 and phase == 2 and not trick.player is None):
         for player in ordered_players:
             players_data[player] = {
                 'cards_number': CardAssociation.objects.filter(hand__player=player, trick__isnull=True, round=current_round).count(),
@@ -129,7 +129,7 @@ def nextRound(room):
             dealer = Player.objects.get(user=room.owner, rooms=room)
         else:
             last_round = Round.objects.get(room=room, value=round_count)
-            if not Trick.objects.filter(round=last_round).count() == last_round.value(): return
+            if not Trick.objects.filter(round=last_round).count() == last_round.value : return
             ordered_player = getOrderedPlayers(Trick.objects.get(value=1, round=last_round))
             dealer = ordered_player[0]
         new_round = Round.objects.create(room=room, value=round_count+1, player=dealer)
@@ -143,9 +143,13 @@ def nextTrick(trick_number, current_round):
         betPhase(current_round.room)
     else:
         time.sleep(2)
-        if not Trick.objects.get(round=current_round, value=trick_number).player is None and not Trick.objects.filter(round=current_round, value=trick_number + 1).exists():
-            Trick.objects.create(round=current_round, value=trick_number + 1)
-            sendGameUpdate(current_round.room, 'next_trick')
+        if not Trick.objects.filter(round=current_round, value=trick_number + 1).exists():
+            if trick_number == 0:
+                Trick.objects.create(round=current_round, value=trick_number + 1)
+                sendGameUpdate(current_round.room, 'next_trick')
+            elif not Trick.objects.get(round=current_round, value=trick_number).player is None:
+                Trick.objects.create(round=current_round, value=trick_number + 1)
+                sendGameUpdate(current_round.room, 'next_trick')
 
 def distributeCards(room):
     current_round = room.rounds.all().latest('value')
@@ -203,7 +207,6 @@ def playCard(request, room, data):
     # Vérifier tour de jeu
     if playerTurn(current_trick) == current_player:
         card_name = data.get('card_name')
-        print(card_name)
         if card_name == "tigress0" or card_name == "tigress1":
             current_round.tigressOption = (card_name[7] == "1")
             current_round.save()
@@ -258,8 +261,10 @@ def defineTrickWinner(trick):
         pirates_players = [pirate.hand.player for pirate in pirates]
         for player in ordered_players:
             if player in pirates_players:
-                max_card = pirates.get(hand__player=player)
-                break
+                for pirate in pirates:
+                    if pirate.hand.player == player:
+                        max_card = pirate
+                        break
     else:
         # Aucune carte spéciale maitresse jouée
         colors = ["black", "green", "purple", "yellow"]
