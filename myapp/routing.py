@@ -5,10 +5,9 @@
 from django.urls import path, re_path
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.auth import AuthMiddlewareStack
-from myapp.consumers import RoomConsumer, GameConsumer, TestConsumer
+from myapp.consumers import RoomConsumer, GameConsumer
 
 websocket_urlpatterns = [
     path('ws/room_updates/', RoomConsumer.as_asgi()),
     path('ws/game_updates/', GameConsumer.as_asgi()),
-    path('ws/test/', TestConsumer.as_asgi()),
 ]

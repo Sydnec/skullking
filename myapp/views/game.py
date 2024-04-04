@@ -106,7 +106,7 @@ def gameData(request, room):
             'round_number': current_round.value,
             'hand_cards': hand_cards,
             'trick_cards': trick_cards_ordered,
-            'players_data':players_data,
+            'players_data': players_data,
         }
         if phase == 1:
             return render(request, 'myapp/bet.html', data)
@@ -265,6 +265,7 @@ def defineTrickWinner(trick):
                     if pirate.hand.player == player:
                         max_card = pirate
                         break
+                break
     else:
         # Aucune carte spéciale maitresse jouée
         colors = ["black", "green", "purple", "yellow"]

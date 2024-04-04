@@ -59,15 +59,3 @@ class GameConsumer(AsyncWebsocketConsumer):
             'room_id': event['room_id'],
             'data': event['data']
         }))
-
-class TestConsumer(AsyncWebsocketConsumer):
-    async def connect(self):
-        logging.info("WebSocket Connected")
-        await self.accept()
-
-    async def disconnect(self, close_code):
-        logging.info("WebSocket Disconnected")
-
-    async def receive(self, text_data):
-        logging.info(f"Message received: {text_data}")
-        await self.send(text_data="Message received!")
