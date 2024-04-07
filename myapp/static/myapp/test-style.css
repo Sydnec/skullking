@@ -150,6 +150,7 @@ input[type="password"] { /* Réinitialise la police sur les champs mot de passe 
 		url('./images/background.jpg');
 	background-size: cover;
 	background-repeat: no-repeat;
+	background-position: center;
 }
 #home-play-button {
 	padding: 1vh 5vh;
@@ -158,7 +159,7 @@ input[type="password"] { /* Réinitialise la police sur les champs mot de passe 
 	color: black;
 	background-color: var(--gold-color);
 	top: 50vh;
-	left: 20vh;
+	left: 17.5vh;
 	border-radius: 0.5vw;
 }
 #home-play-button:hover {
