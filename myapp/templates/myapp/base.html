@@ -45,13 +45,13 @@
 			<div id="navbar-right" class="navbar-element navbar-element-extremity">
 				<!-- show registration & login only if user is not yet authenticated -->
 				{% if not user.is_authenticated %}
-                    <a id="login-button" class="navbar-link" href="{% url 'login' %}">Login</a>
-					<a id="register-button" class="navbar-link" href="{% url 'register' %}">
+                    <a id="login-link" class="navbar-link" href="{% url 'login' %}">Login</a>
+					<a id="register-button" class="navbar-link button" href="{% url 'register' %}">
                         Register
                     </a>
 				{% else %}
 				    <!-- show sign out only if user is authenticated -->
-                    <a id="signout-button" class="navbar-link" href="{% url 'logout' %}">Sign Out</a>
+                    <a id="signout-button" class="navbar-link button" href="{% url 'logout' %}">Sign Out</a>
 				{% endif %}
 			</div>
 		</div>

@@ -9,7 +9,8 @@
 :root {
 	--gold-color: #efd45c;
 	--dark-gold-color: #d8941b;
-	--red-color: #F5554E;
+	--red-color: #f5554e;
+	--default-font-size: 3vh;
 }
 * {
 	margin: 0;
@@ -34,7 +35,57 @@ li,
 label,
 a,
 input {
+	background-color: transparent;
 	color: white;
+}
+h1 {
+	color: var(--gold-color);
+	font-size: calc(var(--default-font-size) * 2);
+	margin-bottom: 5vh;
+}
+h2 {
+	color: var(--dark-gold-color);
+	font-size: calc(var(--default-font-size) * 1.5);
+	margin-bottom: 3vh;
+}
+p,
+li,
+label,
+a,
+input,
+button {
+	font-size: var(--default-font-size);
+}
+button, .button {
+	color: black;
+	background-color: var(--gold-color);
+	padding: 0.7vh 1vh;
+	border-radius: 0.5vh;
+}
+button:hover, .button:hover {
+	color: white;
+	box-shadow: 0 0 2vh var(--gold-color);
+	cursor: pointer;
+}
+a:hover {
+	color: var(--gold-color);
+	cursor: pointer;
+}
+.frame {
+	text-align: center;
+	padding: 3%;
+	background: rgba(0, 0, 0, 0.7);
+	box-sizing: border-box;
+	box-shadow: 0 0 5vh rgba(0, 0, 0, 0.8), 0 0 15vh rgba(0, 0, 0, 0.9);
+	border-radius: 2vh;
+}
+.alert {
+	font-size: calc(var(--default-font-size) * 1.2);
+	margin-bottom: 2vh;
+	color: var(--red-color);
+}
+input[type="password"] { /* Réinitialise la police sur les champs mot de passe (* est inconnu) */
+	font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 /* ! NAVBAR ! */
 #navbar {
@@ -54,11 +105,8 @@ input {
 	display: inline-block;
 	text-align: center;
 	padding: 0.7vh 0;
-	font-size: 4vh;
+	font-size: calc(var(--default-font-size) * 1.3);
 	width: 17vh;
-}  
-.navbar-link:hover {
-	color: var(--gold-color);
 }
 #navbar-left {
 	justify-content: left;
@@ -78,44 +126,91 @@ input {
 	transform: translateY(-50%) translateX(-50%);
 	height: 8vh;
 }
-#register-button {
-	color: black;
-	background-color: var(--gold-color);
-	border-radius: 1vw;
-}
-#register-button:hover {
-	color: white;
-	box-shadow: 0 0 5px var(--gold-color), 0 0 25px var(--gold-color);
-}
+#register-button,
 #signout-button {
 	color: black;
+	border-radius: 0.5vw;
+}
+#register-button:hover,
+#signout-button:hover {
+	color: white;
+}
+#signout-button {
 	background-color: var(--red-color);
-	border-radius: 1vw;
 }
 #signout-button:hover {
 	color: white;
-	box-shadow: 0 0 5px var(--red-color), 0 0 25px var(--red-color);
+	box-shadow: 0 0 2vh var(--red-color);
 }
 /* ! HOME ! */
 #content {
+	position: relative;
 	height: 90vh;
-	background-image: linear-gradient(to top, transparent, rgba(0, 0, 0, 1)), url('./images/background.jpg');
+	background-image: linear-gradient(to top, transparent, rgba(0, 0, 0, 1)),
+		url('./images/background.jpg');
 	background-size: cover;
 	background-repeat: no-repeat;
 }
 #home-play-button {
-	padding: 1vh 1vw;
+	padding: 1vh 5vh;
 	position: absolute;
-	width: 10vw;
-	font-size: 3.2vw;
+	font-size: calc(var(--default-font-size) * 1.5);
 	color: black;
 	background-color: var(--gold-color);
-	left: 10vw;
 	top: 50vh;
-	border-radius: 1vw;
+	left: 20vh;
+	border-radius: 0.5vw;
 }
 #home-play-button:hover {
 	color: white;
-	box-shadow: 0 0 5px var(--gold-color), 0 0 25px var(--gold-color);
+	box-shadow: 0 0 2vh var(--gold-color), 0 0 5vh var(--gold-color);
 	cursor: pointer;
+}
+/* ! AUTH ! */
+#auth-content {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 50vh;
+}
+.user-box {
+	position: relative;
+}
+.auth-input {
+	width: 100%;
+	padding: 10px 0;
+	margin-bottom: 3vh;
+	border: none;
+	border-bottom: 1px solid #fff;
+	outline: none;
+	background: transparent;
+}
+.auth-label {
+	position: absolute;
+	top:0;
+	left: 0;
+	padding: 10px 0;
+	color: #fff;
+	pointer-events: none;
+	transition: .5s;
+}
+#login-submit-button {
+	width: 100%;
+}
+.auth-input:focus ~ label,
+.auth-input:valid ~ label {
+  top: calc(var(--default-font-size) * -1);
+  left: 0;
+  color: var(--dark-gold-color);
+  font-size: calc(var(--default-font-size) * 0.7);
+}
+#no-account, #yet-account {
+	margin-top: 2.5vh;
+}
+#no-account *, #yet-account * {
+	font-size: calc(var(--default-font-size) * 0.8);
+}
+#no-account a, #yet-account a {
+	font-weight: 800;
 }

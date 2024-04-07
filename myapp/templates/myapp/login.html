@@ -1,42 +1,38 @@
 <!-- myapp/templates/myapp/login.html -->
 
 {% extends "myapp/base.html" %} {% block content %}
-<div class="form-content frame">
+<div id="auth-content" class="frame">
 	<h1>Login</h1>
 	<!-- Errors messages -->
 	{% if form.errors %}
-	<div class="alert alert-danger">
+	<div class="alert">
 		Your username and password didn't match. Please try again.
 	</div>
 	{% else %} {% if next %} {% if user.is_authenticated %}
-	<div class="alert alert-info">
+	<div class="alert">
 		Your account doesn't have access to this page. To proceed, please login
 		with an account that has access.
 	</div>
 	{% else %}
-	<div class="alert alert-info">Please login to see this page.</div>
+	<div class="alert">Please login to see this page.</div>
 	{% endif %} {% endif %} {% endif %}
 
-	<!-- Form - Login -->
-	<form method="post" action="{% url 'login' %}">
+	<form id="auth-form" method="post" action="{% url 'login' %}">
 		{% csrf_token %}
-		<div class="user-box">
-			<!-- Form field - username -->
-			<input type="text" name="username" required="" />
-			<label>Username</label>
+		<div id="username-field" class="user-box">
+			<input class="auth-input" type="text" name="username" required="" />
+			<label class="auth-label">Username</label>
 		</div>
-		<div class="user-box">
-			<!-- Form field - password -->
-			<input type="password" name="password" required="" />
-			<label>Password</label>
+		<div id="password-field" class="user-box">
+			<input class="auth-input" type="password" name="password" required="" />
+			<label class="auth-label">Password</label>
 		</div>
-		<button id="submit-button" type="submit">Login</button>
-
-		<!-- Form field - next -->
-		<!-- Used to configure redirect after successful login -->
+		<button id="login-submit-button" type="submit">Login</button>
+		<div id="no-account">
+			<p>Don't have an account ? <a href="{% url 'register' %}">Create it</a></p>
+		</div>
 		<input type="hidden" name="next" id="nextInput" value="/" />
-		<script>
-			// Récupère la valeur de next dans l'URL et le met dans value de l'input qui gère la prochaine page
+		<script> // Récupère la valeur de next dans l'URL et le met dans value de l'input qui gère la prochaine page
 			var currentUrl = window.location.href;
 			var nextParamIndex = currentUrl.indexOf("next=");
 			if (nextParamIndex !== -1) {
