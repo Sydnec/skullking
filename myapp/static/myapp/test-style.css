@@ -1,0 +1,121 @@
+/** myapp/static/myapp/test-style.css */
+
+/* ! Initialisation ! */
+/* Initialisation générale */
+@font-face {
+	font-family: 'Pieces of Eight';
+	src: url('./Pieces\ of\ Eight.ttf'); /* Remplacez par le chemin de votre fichier de police */
+}
+:root {
+	--gold-color: #efd45c;
+	--dark-gold-color: #d8941b;
+	--red-color: #F5554E;
+}
+* {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	text-decoration: none;
+	list-style-type: none;
+	font-family: 'Pieces of Eight';
+}
+html {
+	overflow: hidden;
+}
+/* Initialisation du texte */
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+li,
+label,
+a,
+input {
+	color: white;
+}
+/* ! NAVBAR ! */
+#navbar {
+	position: relative;
+	display: flex;
+	height: 10vh;
+	background-color: black;
+	justify-content: space-between;
+	align-items: center;
+}
+.navbar-element {
+	display: flex;
+	align-items: center;
+	width: 33.33%;
+}
+.navbar-link {
+	display: inline-block;
+	text-align: center;
+	padding: 0.7vh 0;
+	font-size: 4vh;
+	width: 17vh;
+}  
+.navbar-link:hover {
+	color: var(--gold-color);
+}
+#navbar-left {
+	justify-content: left;
+	padding-left: 5vw;
+}
+#navbar-center {
+	justify-content: center;
+}
+#navbar-right {
+	justify-content: right;
+	padding-right: 5vw;
+}
+#navbar-home-logo {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translateY(-50%) translateX(-50%);
+	height: 8vh;
+}
+#register-button {
+	color: black;
+	background-color: var(--gold-color);
+	border-radius: 1vw;
+}
+#register-button:hover {
+	color: white;
+	box-shadow: 0 0 5px var(--gold-color), 0 0 25px var(--gold-color);
+}
+#signout-button {
+	color: black;
+	background-color: var(--red-color);
+	border-radius: 1vw;
+}
+#signout-button:hover {
+	color: white;
+	box-shadow: 0 0 5px var(--red-color), 0 0 25px var(--red-color);
+}
+/* ! HOME ! */
+#content {
+	height: 90vh;
+	background-image: linear-gradient(to top, transparent, rgba(0, 0, 0, 1)), url('./images/background.jpg');
+	background-size: cover;
+	background-repeat: no-repeat;
+}
+#home-play-button {
+	padding: 1vh 1vw;
+	position: absolute;
+	width: 10vw;
+	font-size: 3.2vw;
+	color: black;
+	background-color: var(--gold-color);
+	left: 10vw;
+	top: 50vh;
+	border-radius: 1vw;
+}
+#home-play-button:hover {
+	color: white;
+	box-shadow: 0 0 5px var(--gold-color), 0 0 25px var(--gold-color);
+	cursor: pointer;
+}
