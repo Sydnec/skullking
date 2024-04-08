@@ -237,6 +237,9 @@ font-size: calc(var(--default-font-size) * 0.7);}
 }
 
 @media only screen and (min-width: 65vh){
+	.background-image {
+		background-image: none;
+	}
 	/* ! HOVER EFFECTS ! */
 	button:hover, .button:hover {
 		color: white;
