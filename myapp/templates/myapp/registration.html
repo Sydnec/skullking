@@ -1,29 +1,31 @@
 <!-- myapp/templates/myapp/registration.html -->
 
 {% extends "myapp/base.html" %} {% block content %}
-<div id="auth-content" class="frame">
-	<h1>Registration</h1>
-	<!-- Form - User -->
-	<form action="" method="post" class="form-horizontal">
-		{% csrf_token %}
-		<div id="username-field" class="user-box">
-			{% if form.username.errors %}
-			<label class="alert">{{ form.username.errors }}</label>
-			{% endif %}
-			<input class="auth-input" type="text" name="username" required value='{{ form.username.value|default:""}}'>
-			<label class="auth-label">Username</label>
-		</div>
-		<div id="password-field" class="user-box">
-			{% if form.password.errors %}
-			<label class="alert">{{ form.password.errors }}</label>
-			{% endif %}
-			<input class="auth-input" type="password" name="password" required value='{{ form.password.value|default:""}}'>
-			<label class="auth-label">Password</label>
-		</div>
-		<button id="login-submit-button" type="submit">Register</button>
-		<div id="yet-account">
-			<p>Already have an account ? <a href="{% url 'login' %}">Login here</a></p>
-		</div>
-	</form>
+<div id="auth-content" class="fullscreen background-image">
+	<div id="auth-frame" class="frame">
+		<h1>Create an account</h1>
+		<!-- Form - User -->
+		<form action="" method="post" class="form-horizontal">
+			{% csrf_token %}
+			<div id="username-field" class="user-box">
+				{% if form.username.errors %}
+				<label class="alert">{{ form.username.errors }}</label>
+				{% endif %}
+				<input class="auth-input" type="text" name="username" required value='{{ form.username.value|default:""}}'>
+				<label class="auth-label">Username</label>
+			</div>
+			<div id="password-field" class="user-box">
+				{% if form.password.errors %}
+				<label class="alert">{{ form.password.errors }}</label>
+				{% endif %}
+				<input class="auth-input" type="password" name="password" required value='{{ form.password.value|default:""}}'>
+				<label class="auth-label">Password</label>
+			</div>
+			<button id="login-submit-button" type="submit">Register</button>
+			<div id="yet-account">
+				<p>Already have an account ? <a href="{% url 'login' %}">Login here</a></p>
+			</div>
+		</form>
+	</div>
 </div>
 {% endblock content %}

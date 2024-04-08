@@ -1,4 +1,4 @@
-from myapp.views.home import home
+from myapp.views.home import display_home, display_rooms
 from myapp.views.game import display, gameAction
 from myapp.views.logout import logout
 from myapp.views.room import newRoom, leaveRoom
@@ -10,7 +10,8 @@ from django.contrib.auth import views as auth_views
 
 # app_name = 'myapp'
 urlpatterns = [
-    path('', home, name='home'),
+    path('', display_home, name='home'),
+    path('play/', display_rooms, name='rooms'),
     # path('admin/', admin.site.urls),
     path('accounts/login/', auth_views.LoginView.as_view(template_name='myapp/login.html'), name='login'),
     path('login/', auth_views.LoginView.as_view(template_name='myapp/login.html'), name='login'),

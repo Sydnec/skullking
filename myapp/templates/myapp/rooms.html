@@ -1,0 +1,145 @@
+<!-- myapp/templates/myapp/rooms.html -->
+
+{% extends "myapp/base.html" %} {% block content %}
+<script>
+	var socket = new ReconnectingWebSocket(
+		`ws://${window.location.host}:8001/ws/room_updates/`
+	);
+	socket.onmessage = function (event) {
+		var data = JSON.parse(event.data);
+
+        if (data.message === 'update_rooms') {
+			var roomData = data.data;
+			updateRoomList(roomData);
+		}
+	};
+	function createRoomLi(roomData) {
+		// Créer l'élément li
+		var li = document.createElement('li');
+		li.classList.add('room-line-content', "code-" + roomData.room_id);
+		var div = document.createElement('div');
+		div.classList.add('player-list-line', "code-" + roomData.room_id);
+		// Ajouter les noms d'utilisateur à l'intérieur de la div
+		roomData.usernames.forEach(function (username) {
+			var span = document.createElement('span');
+			span.classList.add('username-line');
+			span.textContent = username;
+			div.appendChild(span);
+		});
+		// Créer le formulaire
+		var form = document.createElement('form');
+		form.action = '/room/' + roomData.room_id + '/';
+		form.method = 'post';
+
+		// Ajouter le token CSRF
+		var csrfTokenInput = document.createElement('input');
+		csrfTokenInput.type = 'hidden';
+		csrfTokenInput.name = 'csrfmiddlewaretoken';
+		csrfTokenInput.value = '{{ csrf_token }}';
+		form.appendChild(csrfTokenInput);
+
+		// Ajouter l'input pour l'ID de la salle
+		var roomIdInput = document.createElement('input');
+		roomIdInput.type = 'hidden';
+		roomIdInput.name = 'room_id';
+		roomIdInput.value = roomData.room_id;
+		form.appendChild(roomIdInput);
+
+		// Créer le bouton pour rejoindre la salle
+		var joinButton = document.createElement('button');
+		joinButton.type = 'submit';
+		joinButton.textContent = 'Join room';
+
+		// Ajouter le bouton au formulaire
+		form.appendChild(joinButton);
+
+		// Ajouter la div et le formulaire à l'élément li
+		li.appendChild(div);
+		li.appendChild(form);
+		return li;
+	}
+	function updateRoomList(roomData) {
+		switch (roomData.message) {
+			case 'leave':
+				document
+					.querySelectorAll(
+						`.player-list-line.code-${roomData.room_id} .username-line`
+					)
+					.forEach(function (element) {
+						if (
+							roomData.usernames.includes(
+								element.textContent
+							) === false
+						) {
+							element.remove();
+						}
+					});
+				break;
+			case 'join':
+				document
+					.querySelectorAll(
+						`.player-list-line.code-${roomData.room_id} .username-line`
+					)
+					.forEach(function (element) {
+						element.remove();
+					});
+				roomData.usernames.forEach(function (username) {
+					var spanElement = document.createElement('span');
+					spanElement.className = 'username-line';
+					spanElement.textContent = username;
+					var playerList = document.querySelector(
+						`.player-list-line.code-${roomData.room_id}`
+					);
+					playerList.appendChild(spanElement);
+				});
+				break;
+			case 'create':
+				var roomList = document.querySelector('.room-list ul');
+				roomList.appendChild(createRoomLi(roomData));
+				break;
+			case 'delete':
+				var roomLine = document.querySelector(
+					`.room-line-content.code-${roomData.room_id}`
+				);
+				roomLine.remove();
+				break;
+
+			default:
+				break;
+		}
+	}
+    function updateAction() {
+		var codeInput = document.getElementById("rooms-code-input").value;
+		document.getElementById("rooms-join-form").action = "/room/" + codeInput;
+	}
+</script>
+<div id="rooms-content" class="fullscreen background-image">
+	<div id="rooms-frame" class="panel">
+		<div class="front">
+			<form id="rooms-join-form" class="rooms-form" action="/room/" method="get" onsubmit="updateAction()">
+				{% csrf_token %}
+				<label id="rooms-code-label" for="roomInput">Room code :</label>
+				<input id="rooms-code-input" type="text" name="content" maxlength="6"/>
+				<button id="rooms-join-button" class="rooms-button" type="submit">Join the room</button>
+			</form>
+			<br>
+			<form id="rooms-create-form" class="rooms-form" action="/room/" method="post">
+				{% csrf_token %}
+				<button id="rooms-create-button" class="rooms-button" type="submit">Create new room</button>
+			</form>
+			<button id="rooms-search-button" class="rooms-button rooms-flip-button">Show open rooms</button>	
+		</div>
+		<div class="back">
+			<button class="rooms-button rooms-flip-button">Show open rooms</button>	
+		</div>
+	</div>
+</div>
+
+<script>
+	$(document).ready(function(){
+		$('.rooms-flip-button').click(function(){
+			$('#rooms-frame').toggleClass('flip');
+		});
+	});
+</script>
+{% endblock content %}

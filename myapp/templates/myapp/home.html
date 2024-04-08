@@ -1,5 +1,13 @@
 <!-- myapp/templates/myapp/home.html -->
 
 {% extends "myapp/base.html" %} {% block content %}
-<button id="home-play-button">Play</button>
+<div id="home-content" class="fullscreen background-image">
+    <button id="home-play-button">Play</button>
+</div>
+
+<script>
+    document.getElementById("home-play-button").onclick = function () {
+        location.href = "/play";
+    };
+</script>
 {% endblock %}
