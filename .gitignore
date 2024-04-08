@@ -5,3 +5,4 @@ users.yaml
 *.txt
 0*.py
 server_*.sh
+.DS_Store

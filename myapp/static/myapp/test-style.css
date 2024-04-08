@@ -1,7 +1,7 @@
 /** myapp/static/myapp/test-style.css */
 
 /* ! Initialisation ! */
-/* Initialisation générale */
+/* ? Initialisation générale ? */
 @font-face {
 	font-family: 'Pieces of Eight';
 	src: url('./Pieces\ of\ Eight.ttf');}
@@ -19,8 +19,8 @@
 	font-family: 'Pieces of Eight';}
 html {
 	overflow: hidden;}
-/* Initialisation du texte */
-p, h1, h2, h3, h4, h5, h6, li, label, a, input {
+/* ? Initialisation du texte ? */
+p, h1, h2, h3, h4, h5, h6, li, th, label, a, input {
 	background-color: transparent;
 	color: white;}
 h1 {
@@ -31,8 +31,9 @@ h2 {
 	color: var(--dark-gold-color);
 	font-size: calc(var(--default-font-size) * 1.5);
 	margin-bottom: 2vh;}
-p, li, label, a, input, button {
+p, li, th, label, a, input, button {
 	font-size: var(--default-font-size);}
+/* ? Elements réutilisables ? */
 button, .button {
 	color: black;
 	background-color: var(--gold-color);
@@ -152,7 +153,7 @@ font-size: calc(var(--default-font-size) * 0.7);}
 #rooms-content {
 	background-color: black;
 	text-align: center;}
-#rooms-frame {
+#rooms-panel {
 	height: 55vh;
 	width: 90vw;
 	position: absolute;
@@ -160,14 +161,14 @@ font-size: calc(var(--default-font-size) * 0.7);}
 	left: 50%;
 	transform: translate(-50%, -50%);}
 #rooms-code-input {
-	width: calc(50%); /* 6 caracs */}
+	width: calc(50%);}
 .rooms-button {
 	display: block;
 	padding: 2vh 0;
 	margin: 2vh 0;
 	width: 100%;}
 /* ! FLIP FRAME ! */
-.front, .back {background-color: rgba(0, 0, 0, 0.8);
+#rooms-front-panel, #rooms-back-panel {background-color: rgba(0, 0, 0, 0.8);
 	height: inherit;
 	width: inherit;
 	position: absolute;
@@ -179,20 +180,61 @@ font-size: calc(var(--default-font-size) * 0.7);}
 	transform-style: preserve-3d;
 	backface-visibility: hidden;
 	transition: all .4s ease-in-out;}
-.front {
+#rooms-front-panel {
 	z-index: 900;
 	transform: rotateX(0deg) rotateY(0deg);}
-.back {
+#rooms-back-panel {
 	z-index: 1000;
 	transform: rotateY(-180deg);}
-.flip .front {
+.flip #rooms-front-panel {
 	transform: rotateY(180deg);}
-.flip .back {
+.flip #rooms-back-panel {
 	transform: rotateX(0deg) rotateY(0deg);}
 .rooms-flip-button {
 	position: absolute;
 	width: 94%;
 	bottom: 0;} 
+
+#rooms-avatar-selector {
+	display: block;
+	height: 19vh;
+	background-color: red;
+}
+#rooms-table {
+	width: 100%;
+}
+#rooms-list {
+	display: inline-block;
+	width: 100%;
+	height: 40vh;
+	overflow-y: scroll;
+}
+#rooms-title-line {
+	position: sticky;
+	top: 0;
+	margin-bottom: 2vh;
+}
+.rooms-table-line {
+	margin-bottom: 1vh;
+	display: flex;
+	justify-content: space-between;
+	font-size: 120%;
+}
+.rooms-table-element {
+	width: 33.3%;
+}
+.rooms-line-code {
+	text-align: left;
+}
+.rooms-line-user-count {
+	text-align: center;
+}
+.rooms-line-usernames {
+	display: none;
+}
+.rooms-line-join-form {
+	text-align: right;
+}
 
 @media only screen and (min-width: 65vh){
 	/* ! HOVER EFFECTS ! */
