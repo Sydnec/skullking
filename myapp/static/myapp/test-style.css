@@ -4,41 +4,68 @@
 /* ? Initialisation générale ? */
 @font-face {
 	font-family: 'Pieces of Eight';
-	src: url('./Pieces\ of\ Eight.ttf');}
+	src: url('./Pieces\ of\ Eight.ttf');
+}
 :root {
 	--gold-color: #efd45c;
 	--dark-gold-color: #d8941b;
 	--red-color: #f5554e;
-	--default-font-size: min(3vh, 4.5vw);}
+	--default-font-size: min(3vh, 4.5vw);
+}
 * {
 	margin: 0;
 	padding: 0;
 	border: 0;
 	text-decoration: none;
 	list-style-type: none;
-	font-family: 'Pieces of Eight';}
+	font-family: 'Pieces of Eight';
+}
 html {
-	overflow: hidden;}
+	overflow: hidden;
+}
 /* ? Initialisation du texte ? */
-p, h1, h2, h3, h4, h5, h6, li, th, label, a, input {
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+li,
+th,
+label,
+a,
+input {
 	background-color: transparent;
-	color: white;}
+	color: white;
+}
 h1 {
 	color: var(--gold-color);
 	font-size: calc(var(--default-font-size) * 2);
-	margin-bottom: 3vh;}
+	margin-bottom: 3vh;
+}
 h2 {
 	color: var(--dark-gold-color);
 	font-size: calc(var(--default-font-size) * 1.5);
-	margin-bottom: 2vh;}
-p, li, th, label, a, input, button {
-	font-size: var(--default-font-size);}
+	margin-bottom: 2vh;
+}
+p,
+li,
+th,
+label,
+a,
+input,
+button {
+	font-size: var(--default-font-size);
+}
 /* ? Elements réutilisables ? */
-button, .button {
+button,
+.button {
 	color: black;
 	background-color: var(--gold-color);
 	padding: 0.7vh 1vh;
-	border-radius: 1vh;}
+	border-radius: 1vh;
+}
 .frame {
 	position: absolute;
 	top: 50%;
@@ -49,31 +76,40 @@ button, .button {
 	background: rgba(0, 0, 0, 0.7);
 	box-sizing: border-box;
 	box-shadow: 0 0 5vh rgba(0, 0, 0, 0.8), 0 0 15vh rgba(0, 0, 0, 0.9);
-	border-radius: 2vh;}
+	border-radius: 2vh;
+}
 .alert {
 	font-size: calc(var(--default-font-size) * 1.2);
 	margin-bottom: 2vh;
-	color: var(--red-color);}
-input[type="password"] { /* Réinitialise la police sur les champs mot de passe (* est inconnu) */
-	font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;}
+	color: var(--red-color);
+}
+input[type='password'] {
+	/* Réinitialise la police sur les champs mot de passe (* est inconnu) */
+	font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS',
+		sans-serif;
+}
 #content {
 	position: relative;
-	height: 90vh;}
+	height: 90vh;
+}
 .fullscreen {
 	height: 100%;
-	width: 100%;}
+	width: 100%;
+}
 .background-image {
 	background-image: linear-gradient(to top, transparent, rgba(0, 0, 0, 1)),
 		url('./images/background.jpg');
 	background-size: cover;
 	background-repeat: no-repeat;
-	background-position: center;}
-input{
+	background-position: center;
+}
+input {
 	padding: 10px 0;
 	border: none;
 	border-bottom: 1px solid #fff;
 	outline: none;
-	background: transparent;}
+	background: transparent;
+}
 /* ! NAVBAR ! */
 #navbar {
 	position: relative;
@@ -81,36 +117,46 @@ input{
 	height: 10vh;
 	background-color: black;
 	justify-content: space-between;
-	align-items: center;}
+	align-items: center;
+}
 .navbar-element {
 	display: flex;
 	align-items: center;
-	width: 33.33%;}
+	width: 33.33%;
+}
 .navbar-link {
 	display: inline-block;
 	text-align: center;
 	padding: 0.7vh 0;
 	font-size: calc(var(--default-font-size) * 1.3);
-	width: min(17vh, 23vw);}
+	width: min(17vh, 23vw);
+}
 #navbar-left {
 	justify-content: left;
-	padding-left: 5vw;}
+	padding-left: 5vw;
+}
 #navbar-center {
-	justify-content: center;}
+	justify-content: center;
+}
 #navbar-right {
 	justify-content: right;
-	padding-right: 5vw;}
+	padding-right: 5vw;
+}
 #navbar-home-logo {
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	transform: translateY(-50%) translateX(-50%);
-	height: 8vh;}
-#navbar-register-button, #navbar-logout-button {
-	color: black;
-	border-radius: 1vh;}
+	height: 8vh;
+}
+#navbar-register-button,
 #navbar-logout-button {
-	background-color: var(--red-color);}
+	color: black;
+	border-radius: 1vh;
+}
+#navbar-logout-button {
+	background-color: var(--red-color);
+}
 /* ! HOME ! */
 #home-play-button {
 	padding: 1vh 3vh;
@@ -121,57 +167,79 @@ input{
 	top: 75%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-	border-radius: 1vh;}
+	border-radius: 1vh;
+}
 /* ! AUTH ! */
 #auth-frame {
-	width: min(80vw, 50vh);}
+	width: min(80vw, 50vh);
+}
 .user-box {
 	position: relative;
-	margin: 3vh 0;}
+	margin: 3vh 0;
+}
 .auth-input {
-	width: 100%;}
+	width: 100%;
+}
 .auth-label {
 	position: absolute;
-	top:0;
+	top: 0;
 	left: 0;
 	padding: 10px 0;
 	color: #fff;
 	pointer-events: none;
-	transition: .5s;}
+	transition: 0.5s;
+}
 #login-submit-button {
-	width: 100%;}
-.auth-input:focus ~ label, .auth-input:valid ~ label {
-top: calc(var(--default-font-size) * -1);
-left: 0;
-color: var(--dark-gold-color);
-font-size: calc(var(--default-font-size) * 0.7);}
-#no-account, #yet-account {
-	margin-top: 2.5vh;}
-#no-account a, #yet-account a {
-	font-weight: 800;}
+	width: 100%;
+}
+.auth-input:focus ~ label,
+.auth-input:valid ~ label {
+	top: calc(var(--default-font-size) * -1);
+	left: 0;
+	color: var(--dark-gold-color);
+	font-size: calc(var(--default-font-size) * 0.7);
+}
+#no-account,
+#yet-account {
+	margin-top: 2.5vh;
+}
+#no-account a,
+#yet-account a {
+	font-weight: 800;
+}
 /* ! ROOM LIST ! */
 #rooms-content {
 	background-color: black;
-	text-align: center;}
+	text-align: center;
+}
 #rooms-panel {
-	height: 55vh;
-	width: 90vw;
 	position: absolute;
+	height: 65vh;
+	width: 90vw;
 	top: 50%;
 	left: 50%;
-	transform: translate(-50%, -50%);}
+	transform: translate(-50%, -50%);
+}
 #rooms-code-input {
-	width: calc(50%);}
+	margin: 1.5vh 0;
+	width: calc(50%);
+}
+
 .rooms-button {
 	display: block;
 	padding: 2vh 0;
-	margin: 2vh 0;
-	width: 100%;}
+	margin: 0.5vh 0;
+	width: 100%;
+}
 /* ! FLIP FRAME ! */
-#rooms-front-panel, #rooms-back-panel {background-color: rgba(0, 0, 0, 0.8);
+#rooms-front-panel,
+#rooms-back-panel {
+	background-color: rgba(0, 0, 0, 0.8);
 	height: inherit;
 	width: inherit;
 	position: absolute;
+	display: flex;
+	flex-direction: column;
 	text-align: center;
 	padding: 3%;
 	box-sizing: border-box;
@@ -179,82 +247,88 @@ font-size: calc(var(--default-font-size) * 0.7);}
 	border-radius: 2vh;
 	transform-style: preserve-3d;
 	backface-visibility: hidden;
-	transition: all .4s ease-in-out;}
+	transition: all 0.4s ease-in-out;
+}
 #rooms-front-panel {
 	z-index: 900;
-	transform: rotateX(0deg) rotateY(0deg);}
+	transform: rotateX(0deg) rotateY(0deg);
+}
 #rooms-back-panel {
 	z-index: 1000;
-	transform: rotateY(-180deg);}
+	transform: rotateY(-180deg);
+}
 .flip #rooms-front-panel {
-	transform: rotateY(180deg);}
+	transform: rotateY(180deg);
+}
 .flip #rooms-back-panel {
-	transform: rotateX(0deg) rotateY(0deg);}
+	transform: rotateX(0deg) rotateY(0deg);
+}
 .rooms-flip-button {
-	position: absolute;
-	width: 94%;
-	bottom: 0;} 
-
+	width: 100%;
+}
 #rooms-avatar-selector {
-	display: block;
-	height: 19vh;
+	flex: 1;
 	background-color: red;
 }
-#rooms-table {
-	width: 100%;
+
+#rooms-table-content {
+	flex: 1;
+	overflow-y: auto;
 }
-#rooms-list {
-	display: inline-block;
-	width: 100%;
-	height: 40vh;
-	overflow-y: scroll;
+#rooms-back-button {
+	background-color: transparent;
+	border: solid;
 }
-#rooms-title-line {
-	position: sticky;
-	top: 0;
-	margin-bottom: 2vh;
-}
-.rooms-table-line {
-	margin-bottom: 1vh;
-	display: flex;
-	justify-content: space-between;
-	font-size: 120%;
-}
-.rooms-table-element {
-	width: 33.3%;
+
+.rooms-line-usernames {
+	display: none;
 }
 .rooms-line-code {
 	text-align: left;
 }
-.rooms-line-user-count {
-	text-align: center;
-}
+.rooms-line-user-count,
 .rooms-line-usernames {
-	display: none;
+	text-align: center;
 }
 .rooms-line-join-form {
 	text-align: right;
 }
+.rooms-table-element {
+	width: 30%;
+}
+#rooms-line-join-button {
+	height: 50px;
+}
+#rooms-table-content.rooms-table-line.rooms-line-user-count {
+	width: 2vw;
+}
 
-@media only screen and (min-width: 65vh){
+@media only screen and (min-width: 65vh) {
 	.background-image {
 		background-image: none;
 	}
 	/* ! HOVER EFFECTS ! */
-	button:hover, .button:hover {
+	button:hover,
+	.button:hover {
 		color: white;
 		box-shadow: 0 0 2vh var(--gold-color);
-		cursor: pointer;}
+		cursor: pointer;
+	}
 	a:hover {
 		color: var(--gold-color);
-		cursor: pointer;}
-	#navbar-register-button:hover, #navbar-logout-button:hover {
-		color: white;}
+		cursor: pointer;
+	}
+	#navbar-register-button:hover,
 	#navbar-logout-button:hover {
 		color: white;
-		box-shadow: 0 0 2vh var(--red-color);}
+	}
+	#navbar-logout-button:hover {
+		color: white;
+		box-shadow: 0 0 2vh var(--red-color);
+	}
 	#home-play-button:hover {
 		color: white;
 		box-shadow: 0 0 2vh var(--gold-color), 0 0 5vh var(--gold-color);
-		cursor: pointer;}
+		cursor: pointer;
+	}
 }
