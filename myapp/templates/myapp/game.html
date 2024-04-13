@@ -1,7 +1,24 @@
 <!-- myapp/templates/myapp/game.html -->
 
-{% extends "myapp/base.html" %} {% block content %}
 {% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Skullking</title>
+		<link
+			rel="shortcut icon"
+			href="{% static 'myapp/images/text-logo.png' %}"
+		/>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="{% static 'myapp/test-style.css' %}"
+		/>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	</head>
+	<body>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding&display=swap" rel="stylesheet">
@@ -154,4 +171,5 @@ function toggleHierachie(){
     button.classList.toggle("active");
 }
 </script>
-{% endblock content %}
+</body>
+</html>

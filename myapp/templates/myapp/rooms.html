@@ -137,8 +137,6 @@
 				<tr id="rooms-title-line" class="rooms-table-line">
 					<th class="rooms-line-code rooms-table-element">Code</th>
 					<th class="rooms-line-user-count rooms-table-element">Players</th>
-					<th class="rooms-line-usernames rooms-table-element">Player list
-					</th>
 					<th class="rooms-line-join-form rooms-table-element">
 					</th>
 				</tr>
@@ -148,13 +146,6 @@
 				<tr class="rooms-table-line rooms-{{ room.code }}">
 					<th class="rooms-line-code rooms-table-element">{{ room.code }}</th>
 					<th class="rooms-line-user-count rooms-table-element">{{ room.usernames|length }}</th>
-					<th class="rooms-line-usernames rooms-table-element">
-						<ul>
-							{% for username in room.usernames %}
-							<li class="rooms-username">{{ username }}</li>
-							{% endfor %}
-						</ul>
-					</th>
 					<th class="rooms-line-join-form rooms-table-element">
 						<form action="/room/{{ room.code }}/" method="post">
 							{% csrf_token %}
@@ -165,7 +156,6 @@
 				</tr>
 				{% endfor %}
 			</table>
-			<br>
 			<button id="rooms-back-button" class="rooms-button rooms-flip-button">Back</button>	
 		</div>
 	</div>

@@ -51,7 +51,7 @@ def leaveRoom(request, room_id):
             room.players.remove(player)
             player.delete()
             sendRoomUpdates(room, "leave")
-        return redirect('/')
+        return redirect('/play')
     else:
         return 
 
