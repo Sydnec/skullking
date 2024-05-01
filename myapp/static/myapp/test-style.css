@@ -217,7 +217,29 @@ text-align: right;}
 #rooms-avatar-selector {
 flex: 1;
 background-color: red;}
-
+/* ! ROOM ! */
+#room-frame {
+    background-color: rgba(0, 0, 0, 0.8);
+    height: 65vh;
+    width: 90vw;}
+.room-buttons {
+    position: absolute;
+    bottom: 3vh;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;}
+#room-start-button {
+    margin: 0 5%;
+    flex-basis: 40%;}
+#room-leave-form {
+    margin: 0 5%;
+    flex-grow: 1;}
+#room-leave-button {
+    background-color: var(--red-color);
+    width: 100%;}
+#room-username-list {
+    height: 65%;}
 
 /* ! GAME ! */
 

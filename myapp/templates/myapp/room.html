@@ -7,7 +7,7 @@
 	);
 	socket.onmessage = function (event) {
 		const data = JSON.parse(event.data).data;
-		if (data.message === "start") {
+		if (data.message === 'start') {
 			// Faire une requête AJAX à la fonction display()
 			$.ajax({
 				url: '/room/' + data.room_id, // Remplacez par l'URL de votre fonction display()
@@ -65,23 +65,29 @@
 		}
 	};
 </script>
-<div class="room-content frame">
-	<h1 id="room_id">{{ room_id }}</h1>
-	<ul id="room-username-list">
-		{% for username in usernames %}
-		<li class="username-list">{{ username }}</li>
-		{% endfor %}
-	</ul>
-	<div class="room-buttons">
-		{% if is_owner %}
-		<button class="room-button" name="launch" onclick="startRoom()">
-			Start
-		</button>
-		{% endif %}
-		<form action="/leave/{{ room_id }}/" method="post">
-			{% csrf_token %}
-			<button class="red-button room-button" type="submit">Leave</button>
-		</form>
+<div id="room-content" class="fullscreen background-image">
+	<div id="room-frame" class="frame">
+		<h1 id="room_id">{{ room_id }}</h1>
+		<ul id="room-username-list">
+			{% for username in usernames %}
+			<li class="username-list">{{ username }}</li>
+			{% endfor %}
+		</ul>
+		<div class="room-buttons">
+			{% if is_owner %}
+			<button id="room-start-button" name="start" onclick="startRoom()">
+				Start
+			</button>
+			{% endif %}
+			<form
+				id="room-leave-form"
+				action="/leave/{{ room_id }}/"
+				method="post"
+			>
+				{% csrf_token %}
+				<button id="room-leave-button" type="submit">Leave</button>
+			</form>
+		</div>
 	</div>
 </div>
 <script>
